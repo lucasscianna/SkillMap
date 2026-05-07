@@ -29,20 +29,13 @@ SkillMap is a solo project — approved by Holberton School. Having one person h
 
 ### Step 1 — Ideas Explored
 
-Before settling on SkillMap, I went through a bunch of different ideas. Some were tools I personally wanted, others came from problems I noticed around me. Here's the full list:
+Before settling on SkillMap, I went through a bunch of different ideas. Some were tools I personally wanted, others came from problems I noticed around me. Here are the ones that made it furthest:
 
 1. **FocusFlow** — A work timer with built-in task prioritization and weekly productivity stats. Basically a Pomodoro on steroids.
-2. **DeadlineOS** — A dashboard that aggregates all your deadlines in one place and sends you progressively urgent alerts as due dates approach.
-3. **MeetingMind** — Upload a meeting transcript, and the tool pulls out action items, decisions, and follow-ups automatically.
-4. **HabitCoach** — A habit tracker that doesn't just log your habits but gives you personalized feedback on what's working and what isn't.
-5. **SmartNotes AI** — A note-taking app that summarizes your notes and finds connections between concepts across different entries.
-6. **InboxZero** — An email assistant that prioritizes your inbox and suggests quick replies so you can actually reach inbox zero.
-7. **JobTracker** — Track your job applications with status updates, reminders, and AI-assisted cover letter drafts.
-8. **Scope Creep Detector** — A tool for freelancers and agencies that flags when a client request goes beyond the original project scope.
-9. **Context Switcher** — Saves and restores your full working environment (tabs, apps, files) per project so you can jump between contexts instantly.
-10. **Energy Scheduler** — Plans your tasks around your energy levels throughout the day instead of just time slots.
-11. **Decision Journal** — Log your decisions, the reasoning behind them, and revisit them later to see how they played out.
-12. **SkillMap** — Analyzes the gap between a user's current profile and their career goal, then generates a personalized learning roadmap with concrete resources.
+2. **MeetingMind** — Upload a meeting transcript, and the tool pulls out action items, decisions, and follow-ups automatically.
+3. **HabitCoach** — A habit tracker that doesn't just log your habits but gives you personalized feedback on what's working and what isn't.
+4. **Decision Journal** — Log your decisions, the reasoning behind them, and revisit them later to see how they played out.
+5. **SkillMap** — Analyzes the gap between a user's current profile and their career goal, then generates a personalized learning roadmap with concrete resources.
 
 ### Step 2 — Evaluation & Ranking
 
@@ -51,15 +44,8 @@ Each idea was scored on three criteria: **Feasibility** (can I actually build th
 | Idea | Feasibility | Impact | Innovation | Score (/10) | Status |
 |------|:-----------:|:------:|:----------:|:-----------:|--------|
 | FocusFlow | 9 | 6 | 3 | 8 | ❌ Rejected — market is saturated with similar tools |
-| DeadlineOS | 9 | 6 | 3 | 8 | ❌ Rejected — Google Calendar + Todoist already cover this |
 | MeetingMind | 5 | 8 | 7 | 5 | ❌ Rejected — scope way too large for a solo project |
 | HabitCoach | 7 | 7 | 5 | 7 | ❌ Rejected — unclear what the MVP would actually look like |
-| SmartNotes AI | 6 | 7 | 4 | 6 | ❌ Rejected — competing with Notion AI and Mem.ai |
-| InboxZero | 4 | 7 | 6 | 5 | ❌ Rejected — OAuth/email API complexity kills the timeline |
-| JobTracker | 6 | 7 | 4 | 6 | ❌ Rejected — Huntr, Teal and others already do this well |
-| Scope Creep Detector | 7 | 6 | 8 | 7 | ❌ Rejected — audience too niche to validate quickly |
-| Context Switcher | 3 | 6 | 7 | 4 | ❌ Rejected — requires deep OS-level integration |
-| Energy Scheduler | 5 | 7 | 7 | 6 | ❌ Rejected — energy data is hard to collect reliably |
 | Decision Journal | 7 | 6 | 7 | 7 | ❌ Rejected — value only becomes clear after months of use |
 | **SkillMap** | **9** | **9** | **8** | **9** | ✅ **Selected** |
 
@@ -94,7 +80,7 @@ Web application (responsive), accessible from any browser — no installation re
 - It solves a problem I've personally experienced during my training at Holberton
 - It's applicable to any field, not just software development
 - No existing tool covers the full pipeline — gap analysis → prioritized roadmap → curated resources — in one simple interface
-- Technically feasible as a solo project using React, Node.js, and the Claude API, within a 4 to 6 week timeline
+- Technically feasible as a solo project using React, Node.js, and a local open-source AI model, within a 4 to 6 week timeline
 
 ### 3 Key Features (SMART)
 
@@ -109,13 +95,13 @@ Web application (responsive), accessible from any browser — no installation re
 - AI-powered gap analysis
 - Generated roadmap displayed in the UI
 - Export functionality (PDF or shareable link)
+- Progress tracking over time
 
-### Out-of-Scope
+### Out-of-Scope (planned for v2)
 
 - Native mobile app
 - Mentor matching
 - LinkedIn integration
-- Progress tracking over time (planned for v2)
 
 ### Risks & Mitigation
 
@@ -123,7 +109,6 @@ Web application (responsive), accessible from any browser — no installation re
 |------|-----------|
 | AI response quality can vary | Careful prompt engineering + backend validation of output format and structure |
 | Solo workload can lead to burnout or delays | Strict weekly sprints managed via GitHub Projects, with a tightly scoped MVP |
-| API call costs at scale | Result caching + per-user rate limiting from day one |
 | Sensitive data handling (resumes/CVs) | No raw CV storage — data is processed and immediately discarded |
 
 ---
@@ -132,8 +117,8 @@ Web application (responsive), accessible from any browser — no installation re
 
 SkillMap started from a simple observation: during my training at Holberton, I realized that most people — myself included — struggle to identify what's actually standing between them and their career goals. There are tons of resources out there, but no tool that connects the dots between where you are now and where you want to be. That gap felt like a real problem worth solving.
 
-The idea went through a proper evaluation alongside eleven other concepts. Some were too niche, some had too much competition, and some were just not realistic to build solo in a few weeks. SkillMap stood out because it tackles a genuine, widely-felt problem, and it's technically achievable with the tools I already know — React for the frontend, Node.js for the backend, and the Claude API for the intelligence layer.
+The idea went through a proper evaluation alongside several other concepts. Some were too niche, some had too much competition, and some were just not realistic to build solo in a few weeks. SkillMap stood out because it tackles a genuine, widely-felt problem, and it's technically achievable with the tools I already know — React for the frontend, Node.js for the backend, and a local open-source AI model for the intelligence layer.
 
-The MVP is intentionally focused: a user fills in their profile, sets a career target, and gets back a personalized roadmap with prioritized skills and learning resources. No mentor matching, no LinkedIn scraping, no mobile app — just the core loop that delivers value from the first interaction. Everything else is v2.
+The MVP is intentionally focused: a user fills in their profile, sets a career target, and gets back a personalized roadmap with prioritized skills, learning resources, and progress tracking built in from day one. No mentor matching, no LinkedIn scraping, no mobile app — just the core loop that delivers value from the first interaction. Everything else is v2.
 
 This project is also a chance to go through the full product cycle solo — from ideation to architecture to shipping something real. It's not just about writing code; it's about making decisions, managing scope, and delivering on time. That's what SkillMap is about, both as a product and as a learning experience.
