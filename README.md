@@ -122,3 +122,33 @@ The idea went through a proper evaluation alongside several other concepts. Some
 The MVP is intentionally focused: a user fills in their profile, sets a career target, and gets back a personalized roadmap with prioritized skills, learning resources, and progress tracking built in from day one. No mentor matching, no LinkedIn scraping, no mobile app — just the core loop that delivers value from the first interaction. Everything else is v2.
 
 This project is also a chance to go through the full product cycle solo — from ideation to architecture to shipping something real. It's not just about writing code; it's about making decisions, managing scope, and delivering on time. That's what SkillMap is about, both as a product and as a learning experience.
+
+---
+
+## 🗓️ Stage 2 — Project Planning
+
+### High-Level Plan
+
+| Stage | Duration | Key Deliverable | Status |
+|-------|----------|----------------|--------|
+| Stage 1 — Idea Development | Week 1–2 | Stage 1 Report (team formation, brainstorming, MVP selection) | ✅ Completed |
+| Stage 2 — Project Planning | Week 3 | Project Charter + Timeline | 🔄 In Progress |
+| Stage 3 — Technical Documentation | Week 4–5 | Architecture, ERD, API design, wireframes | ⏳ Upcoming |
+| Stage 4 — MVP Development | Week 6–10 | Functional SkillMap web app | ⏳ Upcoming |
+| Stage 5 — Project Closure | Week 11–12 | Final presentation, demo, retrospective | ⏳ Upcoming |
+
+### Milestones
+
+**Stage 1** wrapped up with a clear direction: SkillMap was selected out of several ideas after scoring highest on feasibility, impact, and innovation. The team (me), the tools, and the scope are all locked in.
+
+**Stage 2** is about turning that idea into a real plan. This means writing the project charter, breaking the work into concrete milestones, and setting up the sprint structure in GitHub Projects so that development can start without hesitation.
+
+**Stage 3** will focus on the technical foundation — system architecture, database schema, API contract, and UI wireframes. The goal is to have every major design decision documented before writing the first line of product code.
+
+**Stage 4** is where the actual building happens. Five weeks of focused development: backend API, AI integration, frontend UI, and the full user flow from profile input to roadmap output. Each week ships something testable.
+
+**Stage 5** closes the loop — final polish, demo preparation, presentation to reviewers, and a retrospective on what worked and what didn't.
+
+### Project Charter
+
+SkillMap is a web application that analyzes the gap between a user's current skill set and their career target, then generates a personalized learning roadmap with prioritized skills and concrete resources. The MVP delivers the core loop: a profile form, a target input, AI-powered gap analysis, a generated roadmap displayed in the UI, export functionality, and progress tracking — nothing more. Native mobile, mentor matching, and LinkedIn integration are explicitly out of scope and planned for a future version. The project is built solo over 12 weeks using React, Node.js, and a local open-source AI model, with sprints managed through GitHub Projects. Success means one thing: a user can enter their profile and career goal and receive a clear, actionable roadmap in under 30 seconds.
