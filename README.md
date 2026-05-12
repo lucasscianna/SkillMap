@@ -95,13 +95,13 @@ Web application (responsive), accessible from any browser — no installation re
 - AI-powered gap analysis
 - Generated roadmap displayed in the UI
 - Export functionality (PDF or shareable link)
-- Progress tracking over time
 
 ### Out-of-Scope (planned for v2)
 
 - Native mobile app
 - Mentor matching
 - LinkedIn integration
+- Progress tracking over time
 
 ### Risks & Mitigation
 
