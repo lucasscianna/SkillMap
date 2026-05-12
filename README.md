@@ -152,3 +152,379 @@ This project is also a chance to go through the full product cycle solo — from
 ### Project Charter
 
 SkillMap is a web application that analyzes the gap between a user's current skill set and their career target, then generates a personalized learning roadmap with prioritized skills and concrete resources. The MVP delivers the core loop: a profile form, a target input, AI-powered gap analysis, a generated roadmap displayed in the UI, export functionality, and progress tracking — nothing more. Native mobile, mentor matching, and LinkedIn integration are explicitly out of scope and planned for a future version. The project is built solo using React, Node.js, and Gemini Flash API (Google), with sprints managed through GitHub Projects. Success means one thing: a user can enter their profile and career goal and receive a clear, actionable roadmap in under 30 seconds.
+
+---
+
+## ⚙️ Stage 3 — Technical Documentation
+
+### Task 0 — User Stories & Mockups
+
+#### User Stories
+
+Every feature in the MVP was translated into a user story. They're prioritized using MoSCoW — anything tagged **Must Have** ships in the first release, everything else waits.
+
+| Priority | User Story |
+|----------|-----------|
+| **Must Have** | As a new user, I want to register with my email and password, so that I can create a personal account. |
+| **Must Have** | As a returning user, I want to log in securely, so that I can access my data. |
+| **Must Have** | As a user, I want to fill in my profile (skills, education, experience), so that the AI has context about where I stand. |
+| **Must Have** | As a user, I want to edit my profile at any time, so that my analysis stays relevant as I grow. |
+| **Must Have** | As a user, I want to enter a career target (job title or paste a job description), so that the AI knows where I'm headed. |
+| **Must Have** | As a user, I want to launch a gap analysis, so that I can see the skills I'm missing. |
+| **Must Have** | As a user, I want to view a prioritized roadmap of skills to acquire, so that I know what to learn and in what order. |
+| **Must Have** | As a user, I want to see at least 2 concrete resources for each missing skill, so that I know where to start learning. |
+| **Should Have** | As a user, I want to export my roadmap as a PDF or shareable link, so that I can save or share it. |
+| **Should Have** | As a user, I want to view my previous analyses, so that I can track my evolution over time. |
+| **Could Have** | As a user, I want to re-run an analysis after updating my profile, so that I can measure my progress. |
+| **Won't Have (v2)** | As a user, I want to connect my LinkedIn profile, so that my data is imported automatically. |
+
+#### Mockups
+
+SkillMap has a full web interface — mockups are being designed in Figma. Below are the main screens with a short description of each. Figma links will be added once the designs are finalized.
+
+| Screen | Description | Mockup |
+|--------|-------------|--------|
+| Landing / Login | Clean entry point — sign up or log in. Minimal copy explaining what SkillMap does. | [View on Figma](#) |
+| Profile Setup | Multi-section form: skills (tag-based input), education, professional experience. | [View on Figma](#) |
+| Target Input | Single input — either type a job title or paste a full job description. Clear CTA to launch the analysis. | [View on Figma](#) |
+| Analysis Results + Roadmap | The core screen. Displays the gap analysis summary, a prioritized skill roadmap, and resource cards for each skill. | [View on Figma](#) |
+| Export | Preview the roadmap in a shareable/printable format. Options: download PDF or copy shareable link. | [View on Figma](#) |
+| Analysis History | List of past analyses with date, target, and a quick summary. Click to re-open any previous result. | [View on Figma](#) |
+
+---
+
+### Task 1 — System Architecture
+
+The architecture is a classic three-tier setup: a React SPA talks to a Node.js/Express API, which handles business logic, persists data in PostgreSQL, and calls the Gemini Flash API for the AI-powered analysis. JWT handles authentication across the stack.
+
+```mermaid
+graph TD
+    Client["React SPA (Client)"]
+    API["Node.js / Express API"]
+    Auth["JWT Auth Middleware"]
+    DB["PostgreSQL"]
+    Gemini["Gemini Flash API (Google)"]
+
+    Client -->|"HTTP requests (JSON)"| Auth
+    Auth -->|"Authenticated requests"| API
+    API -->|"Read / Write"| DB
+    API -->|"Prompt (profile + target)"| Gemini
+    Gemini -->|"JSON response (gap + roadmap)"| API
+    API -->|"JSON response"| Client
+```
+
+**How it flows:**
+1. The React client sends all requests through the JWT auth middleware — every protected route requires a valid token.
+2. The Express API handles routing, validation, and business logic.
+3. For gap analysis, the API builds a structured prompt from the user's profile and target, sends it to Gemini Flash, parses the response, stores the result in PostgreSQL, and returns it to the client.
+4. PostgreSQL stores everything: users, profiles, analyses, and resources.
+
+---
+
+### Task 2 — Components, Classes & Database Design
+
+#### Backend — Class Diagram
+
+```mermaid
+classDiagram
+    class User {
+        +int id
+        +string email
+        +string passwordHash
+        +datetime createdAt
+        +register(email, password) User
+        +login(email, password) Token
+    }
+
+    class Profile {
+        +int id
+        +int userId
+        +string[] skills
+        +string education
+        +string experience
+        +datetime updatedAt
+        +update(data) Profile
+        +getByUserId(userId) Profile
+    }
+
+    class Analysis {
+        +int id
+        +int userId
+        +string targetInput
+        +json gapResult
+        +json roadmap
+        +datetime createdAt
+        +create(userId, target, result) Analysis
+        +getById(id) Analysis
+        +getHistory(userId) Analysis[]
+    }
+
+    class Resource {
+        +int id
+        +int analysisId
+        +string skillName
+        +string title
+        +string url
+        +string type
+        +create(data) Resource
+        +getByAnalysisId(analysisId) Resource[]
+    }
+
+    class GeminiService {
+        +analyzeGap(profile, target) GapResult
+        +formatPrompt(profile, target) string
+        +parseResponse(raw) GapResult
+    }
+
+    User "1" --> "1" Profile : has
+    User "1" --> "*" Analysis : performs
+    Analysis "1" --> "*" Resource : contains
+    Analysis ..> GeminiService : uses
+```
+
+#### Database — Entity-Relationship Diagram
+
+```mermaid
+erDiagram
+    users {
+        int id PK
+        varchar email UK
+        varchar password_hash
+        timestamp created_at
+    }
+
+    profiles {
+        int id PK
+        int user_id FK
+        text[] skills
+        varchar education
+        text experience
+        timestamp updated_at
+    }
+
+    analyses {
+        int id PK
+        int user_id FK
+        text target_input
+        jsonb gap_result
+        jsonb roadmap
+        timestamp created_at
+    }
+
+    resources {
+        int id PK
+        int analysis_id FK
+        varchar skill_name
+        varchar title
+        varchar url
+        varchar type
+    }
+
+    users ||--o| profiles : "has one"
+    users ||--o{ analyses : "performs many"
+    analyses ||--o{ resources : "contains many"
+```
+
+#### Frontend — UI Components
+
+| Component | Role |
+|-----------|------|
+| `AuthForm` | Handles sign-up and login forms, input validation, and error display. |
+| `ProfileForm` | Multi-section form for skills (tag input), education, and experience. Pre-fills on edit. |
+| `TargetInput` | Single input field with a toggle: type a job title or paste a full job description. |
+| `AnalysisLoader` | Loading state shown while the Gemini API processes the gap analysis. Animated indicator. |
+| `RoadmapDisplay` | Renders the prioritized skill list with estimated durations and visual progress indicators. |
+| `ResourceCard` | Displays a single resource: title, type (course/project/reading), and external link. |
+| `ExportButton` | Triggers PDF generation or creates a shareable link. Shows confirmation on success. |
+| `AnalysisHistory` | Lists previous analyses with date, target summary, and a link to view the full result. |
+| `Navbar` | Top navigation bar with logo, profile link, history link, and logout button. |
+
+---
+
+### Task 3 — Sequence Diagrams
+
+#### Diagram 1 — User Registration & Login
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant React as React SPA
+    participant API as Express API
+    participant DB as PostgreSQL
+
+    User->>React: Fill registration form
+    React->>API: POST /api/auth/register (email, password)
+    API->>DB: INSERT INTO users (email, password_hash)
+    DB-->>API: User created
+    API-->>React: 201 Created + JWT token
+    React-->>User: Redirect to profile setup
+
+    Note over User,DB: Returning user — login flow
+
+    User->>React: Fill login form
+    React->>API: POST /api/auth/login (email, password)
+    API->>DB: SELECT user WHERE email = ?
+    DB-->>API: User record
+    API->>API: Verify password hash
+    API-->>React: 200 OK + JWT token
+    React-->>User: Redirect to dashboard
+```
+
+#### Diagram 2 — Gap Analysis Flow (core feature)
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant React as React SPA
+    participant API as Express API
+    participant Gemini as GeminiService
+    participant Flash as Gemini Flash API
+    participant DB as PostgreSQL
+
+    User->>React: Enter target + click "Analyze"
+    React->>API: POST /api/analysis (target, JWT)
+    API->>DB: SELECT profile WHERE user_id = ?
+    DB-->>API: User profile data
+    API->>Gemini: analyzeGap(profile, target)
+    Gemini->>Gemini: formatPrompt(profile, target)
+    Gemini->>Flash: POST /v1/models/gemini-flash (prompt)
+    Flash-->>Gemini: Raw JSON response
+    Gemini->>Gemini: parseResponse(raw)
+    Gemini-->>API: Structured gap result + roadmap
+    API->>DB: INSERT INTO analyses (gap_result, roadmap)
+    API->>DB: INSERT INTO resources (for each skill)
+    DB-->>API: Saved
+    API-->>React: 200 OK + analysis data
+    React-->>User: Display roadmap + resources
+```
+
+#### Diagram 3 — Load Analysis History
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant React as React SPA
+    participant API as Express API
+    participant DB as PostgreSQL
+
+    User->>React: Navigate to "History"
+    React->>API: GET /api/analysis/history (JWT)
+    API->>DB: SELECT analyses WHERE user_id = ? ORDER BY created_at DESC
+    DB-->>API: List of analyses
+    API-->>React: 200 OK + analysis list
+    React-->>User: Display analysis history
+
+    User->>React: Click on a specific analysis
+    React->>API: GET /api/analysis/:id (JWT)
+    API->>DB: SELECT analysis + resources WHERE id = ?
+    DB-->>API: Full analysis data
+    API-->>React: 200 OK + analysis + resources
+    React-->>User: Display full roadmap + resources
+```
+
+---
+
+### Task 4 — API Specifications
+
+#### External API — Gemini Flash (Google)
+
+**Why Gemini Flash?** Three reasons: it's free within the generous quota limits (more than enough for an MVP), it's fast (optimized for low-latency responses), and it handles structured text analysis well — which is exactly what gap analysis requires. Compared to OpenAI GPT-4, it removes the cost barrier entirely during development and early usage.
+
+**Prompt format** — The API receives a structured prompt built from the user's profile and target:
+
+```json
+{
+  "contents": [
+    {
+      "parts": [
+        {
+          "text": "You are a career advisor. Given the following user profile and career target, identify the skill gaps and generate a prioritized learning roadmap.\n\nProfile:\n- Skills: JavaScript, React, Node.js\n- Education: Holberton School - Fullstack Web Development\n- Experience: 1 year of project-based learning\n\nTarget: Backend Engineer at a mid-size tech company\n\nRespond in JSON with this structure:\n{\n  \"gaps\": [{\"skill\": \"...\", \"priority\": \"high|medium|low\"}],\n  \"roadmap\": [{\"skill\": \"...\", \"duration\": \"...\", \"order\": 1}],\n  \"resources\": [{\"skill\": \"...\", \"title\": \"...\", \"url\": \"...\", \"type\": \"course|project|reading\"}]\n}"
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Expected response structure** (parsed from Gemini's output):
+
+```json
+{
+  "gaps": [
+    { "skill": "PostgreSQL", "priority": "high" },
+    { "skill": "Docker", "priority": "medium" },
+    { "skill": "System Design", "priority": "medium" }
+  ],
+  "roadmap": [
+    { "skill": "PostgreSQL", "duration": "2 weeks", "order": 1 },
+    { "skill": "Docker", "duration": "1 week", "order": 2 },
+    { "skill": "System Design", "duration": "3 weeks", "order": 3 }
+  ],
+  "resources": [
+    { "skill": "PostgreSQL", "title": "PostgreSQL Tutorial - freeCodeCamp", "url": "https://...", "type": "course" },
+    { "skill": "PostgreSQL", "title": "Build a REST API with Express + PostgreSQL", "url": "https://...", "type": "project" }
+  ]
+}
+```
+
+#### Internal API Endpoints
+
+| Method | Endpoint | Description | Auth | Request Body | Response |
+|--------|----------|-------------|:----:|-------------|----------|
+| POST | `/api/auth/register` | Create a new user account | No | `{ email, password }` | `{ token, user: { id, email } }` |
+| POST | `/api/auth/login` | Authenticate and receive a JWT | No | `{ email, password }` | `{ token, user: { id, email } }` |
+| GET | `/api/profile` | Get the authenticated user's profile | Yes | — | `{ id, skills, education, experience }` |
+| PUT | `/api/profile` | Create or update the user's profile | Yes | `{ skills, education, experience }` | `{ id, skills, education, experience, updatedAt }` |
+| POST | `/api/analysis` | Run a gap analysis (core endpoint) | Yes | `{ targetInput }` | `{ id, gaps, roadmap, resources, createdAt }` |
+| GET | `/api/analysis/:id` | Get a specific analysis by ID | Yes | — | `{ id, targetInput, gaps, roadmap, resources, createdAt }` |
+| GET | `/api/analysis/history` | List all analyses for the user | Yes | — | `[{ id, targetInput, createdAt }]` |
+
+All protected endpoints expect a `Bearer <token>` in the `Authorization` header. Invalid or expired tokens return `401 Unauthorized`.
+
+---
+
+### Task 5 — SCM & QA Strategy
+
+#### Source Control Management
+
+The repo follows a branch-based workflow designed for solo development but structured enough to stay clean:
+
+- **`main`** — production-ready code only. Nothing gets merged here without passing through `develop` first.
+- **`develop`** — integration branch. All feature branches merge here after review.
+- **`feature/*`** — one branch per feature (e.g., `feature/gap-analysis`, `feature/profile-form`).
+- **`fix/*`** — bug fix branches (e.g., `fix/auth-token-expiry`).
+
+**Commit convention:** [Conventional Commits](https://www.conventionalcommits.org/) — every commit message follows a strict format:
+- `feat:` — new feature
+- `fix:` — bug fix
+- `docs:` — documentation changes
+- `refactor:` — code restructuring without behavior change
+- `chore:` — tooling, dependencies, config
+
+**Rule:** Every feature or fix goes through a pull request before merging into `develop`. Even solo, PRs force a moment of review — re-reading your own code before it lands.
+
+#### Quality Assurance
+
+| Layer | Tool | What's Tested |
+|-------|------|---------------|
+| Backend unit tests | Jest | Services (GeminiService, auth logic) and controllers (input validation, response format) |
+| Frontend component tests | React Testing Library | Critical UI components: `ProfileForm`, `RoadmapDisplay`, `AuthForm` |
+| API testing | Postman | Manual testing of all endpoints — happy path + error cases |
+| End-to-end | Manual | Full user flow (register → profile → analysis → roadmap → export) tested at the end of every sprint |
+
+**Testing rhythm:** Unit tests run on every push. The full manual flow is tested at the end of each sprint before merging `develop` into `main`.
+
+---
+
+### Task 6 — Technical Justifications
+
+Every major technology choice was made deliberately — here's what was considered and why the final pick won.
+
+| Technology | Alternative Considered | Reason for Choice |
+|------------|----------------------|-------------------|
+| **React** | Vue.js | React has a larger ecosystem, more community resources, and I already have hands-on experience with it from Holberton. Vue is great, but switching frameworks during a tight timeline adds unnecessary risk. |
+| **Node.js / Express** | Django (Python) | JavaScript across the entire stack (frontend + backend) means no context switching and shared tooling. Express is minimal and doesn't impose structure — which is an advantage when you want full control over the architecture. |
+| **PostgreSQL** | MongoDB | The data model is relational: users have profiles, profiles trigger analyses, analyses contain resources. PostgreSQL handles these relationships natively with joins and foreign keys. MongoDB would work, but a document store adds complexity for relational queries without a clear upside here. |
+| **Gemini Flash API (Google)** | OpenAI GPT-4 | Gemini Flash is free within its quota limits — critical for an MVP with zero budget. It's fast, handles structured text analysis well, and the Google AI SDK integrates cleanly with Node.js. GPT-4 is arguably more powerful, but the cost per request makes it impractical for development and testing at scale. |
+| **JWT** | Session-based auth | JWT is stateless — no server-side session storage needed. This simplifies the backend, scales naturally, and works seamlessly with a React SPA that sends tokens via headers. Sessions would require a store (Redis, DB) and add moving parts that aren't justified for this project. |
+| **Railway / Render** | AWS (EC2, RDS) | Railway and Render offer one-click deploys, free tiers for MVPs, and zero DevOps overhead. AWS is more powerful but wildly overkill for a solo project — configuring VPCs, security groups, and IAM roles is not where I should be spending my time during a 12-week build. |
