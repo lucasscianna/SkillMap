@@ -80,7 +80,7 @@ Web application (responsive), accessible from any browser — no installation re
 - It solves a problem I've personally experienced during my training at Holberton
 - It's applicable to any field, not just software development
 - No existing tool covers the full pipeline — gap analysis → prioritized roadmap → curated resources — in one simple interface
-- Technically feasible as a solo project using React, Node.js, and a local open-source AI model, within a 4 to 6 week timeline
+- Technically feasible as a solo project using React, Node.js, and Gemini Flash API (Google), within a 4 to 6 week timeline
 
 ### 3 Key Features (SMART)
 
@@ -117,7 +117,7 @@ Web application (responsive), accessible from any browser — no installation re
 
 SkillMap started from a simple observation: during my training at Holberton, I realized that most people — myself included — struggle to identify what's actually standing between them and their career goals. There are tons of resources out there, but no tool that connects the dots between where you are now and where you want to be. That gap felt like a real problem worth solving.
 
-The idea went through a proper evaluation alongside several other concepts. Some were too niche, some had too much competition, and some were just not realistic to build solo in a few weeks. SkillMap stood out because it tackles a genuine, widely-felt problem, and it's technically achievable with the tools I already know — React for the frontend, Node.js for the backend, and a local open-source AI model for the intelligence layer.
+The idea went through a proper evaluation alongside several other concepts. Some were too niche, some had too much competition, and some were just not realistic to build solo in a few weeks. SkillMap stood out because it tackles a genuine, widely-felt problem, and it's technically achievable with the tools I already know — React for the frontend, Node.js for the backend, and Gemini Flash API (Google) for the intelligence layer.
 
 The MVP is intentionally focused: a user fills in their profile, sets a career target, and gets back a personalized roadmap with prioritized skills and learning resources. No mentor matching, no LinkedIn scraping, no mobile app — just the core loop that delivers value from the first interaction. Everything else is v2.
 
@@ -151,4 +151,4 @@ This project is also a chance to go through the full product cycle solo — from
 
 ### Project Charter
 
-SkillMap is a web application that analyzes the gap between a user's current skill set and their career target, then generates a personalized learning roadmap with prioritized skills and concrete resources. The MVP delivers the core loop: a profile form, a target input, AI-powered gap analysis, a generated roadmap displayed in the UI, export functionality, and progress tracking — nothing more. Native mobile, mentor matching, and LinkedIn integration are explicitly out of scope and planned for a future version. The project is built solo using React, Node.js, and a local open-source AI model, with sprints managed through GitHub Projects. Success means one thing: a user can enter their profile and career goal and receive a clear, actionable roadmap in under 30 seconds.
+SkillMap is a web application that analyzes the gap between a user's current skill set and their career target, then generates a personalized learning roadmap with prioritized skills and concrete resources. The MVP delivers the core loop: a profile form, a target input, AI-powered gap analysis, a generated roadmap displayed in the UI, export functionality, and progress tracking — nothing more. Native mobile, mentor matching, and LinkedIn integration are explicitly out of scope and planned for a future version. The project is built solo using React, Node.js, and Gemini Flash API (Google), with sprints managed through GitHub Projects. Success means one thing: a user can enter their profile and career goal and receive a clear, actionable roadmap in under 30 seconds.
