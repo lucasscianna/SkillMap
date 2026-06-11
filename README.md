@@ -184,12 +184,12 @@ SkillMap has a full web interface — mockups are being designed in Figma. Below
 
 | Screen | Description | Mockup |
 |--------|-------------|--------|
-| Landing / Login | Clean entry point — sign up or log in. Minimal copy explaining what SkillMap does. | [View on Figma](#) |
-| Profile Setup | Multi-section form: skills (tag-based input), education, professional experience. | [View on Figma](#) |
-| Target Input | Single input — either type a job title or paste a full job description. Clear CTA to launch the analysis. | [View on Figma](#) |
-| Analysis Results + Roadmap | The core screen. Displays the gap analysis summary, a prioritized skill roadmap, and resource cards for each skill. | [View on Figma](#) |
-| Export | Preview the roadmap in a shareable/printable format. Options: download PDF or copy shareable link. | [View on Figma](#) |
-| Analysis History | List of past analyses with date, target, and a quick summary. Click to re-open any previous result. | [View on Figma](#) |
+| Landing / Login | Clean entry point — sign up or log in. Minimal copy explaining what SkillMap does. | [View Mockup](https://lucasscianna.github.io/SkillMap/assets/mockups/landing.html) |
+| Profile Setup | Multi-section form: skills (tag-based input), education, professional experience. | [View Mockup](https://lucasscianna.github.io/SkillMap/assets/mockups/profile.html) |
+| Target Input | Single input — either type a job title or paste a full job description. Clear CTA to launch the analysis. | [View Mockup](https://lucasscianna.github.io/SkillMap/assets/mockups/target.html) |
+| Analysis Results + Roadmap | The core screen. Displays the gap analysis summary, a prioritized skill roadmap, and resource cards for each skill. | [View Mockup](https://lucasscianna.github.io/SkillMap/assets/mockups/results.html) |
+| Export | Preview the roadmap in a shareable/printable format. Options: download PDF or copy shareable link. | [View Mockup](https://lucasscianna.github.io/SkillMap/assets/mockups/export.html) |
+| Analysis History | List of past analyses with date, target, and a quick summary. Click to re-open any previous result. | [View Mockup](https://lucasscianna.github.io/SkillMap/assets/mockups/history.html) |
 
 ---
 
