@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SkillMap - Target Input</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+              "tertiary-fixed": "#ffdcbf",
+              "on-secondary-container": "#bdadff",
+              "on-secondary-fixed-variant": "#4a21be",
+              "on-tertiary-fixed-variant": "#6a3b00",
+              "primary-fixed-dim": "#acc7ff",
+              "on-error": "#690005",
+              "tertiary": "#ffb873",
+              "surface-container-low": "#161b29",
+              "on-primary-container": "#00285b",
+              "error-container": "#93000a",
+              "on-background": "#dee2f5",
+              "background": "#0e1320",
+              "on-primary": "#002f68",
+              "on-surface-variant": "#c2c6d5",
+              "surface-bright": "#343948",
+              "inverse-primary": "#005bbf",
+              "surface-tint": "#acc7ff",
+              "primary": "#acc7ff",
+              "surface-variant": "#303443",
+              "tertiary-fixed-dim": "#ffb873",
+              "surface": "#0e1320",
+              "on-secondary-fixed": "#1d0061",
+              "error": "#ffb4ab",
+              "surface-container-highest": "#303443",
+              "secondary": "#cbbeff",
+              "on-tertiary": "#4b2800",
+              "inverse-on-surface": "#2b303e",
+              "surface-container": "#1a1f2d",
+              "on-primary-fixed-variant": "#004492",
+              "secondary-fixed": "#e6deff",
+              "primary-fixed": "#d7e2ff",
+              "on-secondary": "#330099",
+              "outline": "#8c909e",
+              "surface-container-lowest": "#090e1b",
+              "on-primary-fixed": "#001a40",
+              "tertiary-container": "#d37b02",
+              "surface-container-high": "#252a38",
+              "on-tertiary-container": "#412200",
+              "outline-variant": "#424753",
+              "inverse-surface": "#dee2f5",
+              "on-error-container": "#ffdad6",
+              "secondary-fixed-dim": "#cbbeff",
+              "primary-container": "#508ff8",
+              "surface-dim": "#0e1320",
+              "on-tertiary-fixed": "#2d1600",
+              "on-surface": "#dee2f5",
+              "secondary-container": "#4d24c0"
+            },
+            "borderRadius": {
+              "DEFAULT": "0.25rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+            "spacing": {
+              "unit-sm": "8px",
+              "margin-desktop": "40px",
+              "unit-md": "16px",
+              "sidebar-width": "280px",
+              "unit-lg": "24px",
+              "gutter": "24px",
+              "unit-xs": "4px",
+              "unit-xl": "32px",
+              "margin-mobile": "16px",
+              "container-max-width": "1440px"
+            },
+            "fontFamily": {
+              "headline-md": ["Inter"],
+              "display-lg-mobile": ["Inter"],
+              "body-lg": ["Inter"],
+              "display-lg": ["Inter"],
+              "headline-lg": ["Inter"],
+              "body-sm": ["Inter"],
+              "label-md": ["Inter"],
+              "body-md": ["Inter"]
+            },
+            "fontSize": {
+              "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+              "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+              "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+              "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+              "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+              "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+              "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+              "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+      .glass-panel {
+        background: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+      }
+      .text-gradient {
+        background: linear-gradient(to right, #acc7ff, #cbbeff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .bg-gradient-btn {
+        background: linear-gradient(135deg, #508ff8 0%, #4d24c0 100%);
+      }
+      .bg-gradient-btn:hover {
+        background: linear-gradient(135deg, #427ce3 0%, #3e1b9b 100%);
+      }
+      .custom-input {
+        background-color: rgba(14, 19, 32, 0.5);
+        border: 1px solid rgba(140, 144, 158, 0.3);
+        color: #dee2f5;
+        transition: all 0.2s ease;
+      }
+      .custom-input:focus {
+        border-color: #508ff8;
+        box-shadow: 0 0 0 1px #508ff8, 0 0 15px rgba(80, 143, 248, 0.2);
+        outline: none;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex font-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Sidebar Navigation -->
+<nav class="fixed left-0 top-0 h-screen w-sidebar-width border-r border-outline-variant/20 bg-surface-container-low shadow-sm flex flex-col py-unit-lg px-unit-md z-50 hidden md:flex">
+<div class="flex items-center gap-3 mb-unit-xl px-2">
+<span class="font-headline-md text-headline-md font-bold tracking-tight text-on-surface">SkillMap</span>
+</div>
+<div class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto mb-unit-lg">
+<button class="w-full bg-gradient-btn text-white font-label-md text-label-md py-3 rounded-full hover:opacity-90 transition-opacity">
+          Analyze Skills
+        </button>
+</div>
+<div class="pt-4 border-t border-outline-variant/20">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-grow md:ml-sidebar-width p-margin-mobile md:p-margin-desktop min-h-screen relative flex flex-col justify-center items-center">
+<!-- Mobile Header -->
+<div class="absolute top-6 left-6 right-6 flex justify-between items-center md:hidden">
+<span class="font-headline-md text-headline-md font-bold tracking-tight text-on-surface">SkillMap</span>
+<button class="text-on-surface p-2 hover:bg-surface-container rounded-lg">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<!-- Target Input Bento Card -->
+<div class="w-full max-w-2xl bg-surface-container rounded-3xl border border-outline-variant/20 shadow-xl overflow-hidden glass-panel">
+<!-- Card Header -->
+<div class="px-8 pt-8 pb-6 border-b border-outline-variant/10">
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Define Your Goal</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Tell us what role or milestone you are targeting next.</p>
+</div>
+<!-- Card Body (Form) -->
+<form class="p-8 space-y-6" onsubmit="event.preventDefault();">
+<!-- Target Role Input -->
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="target-role">Target Role / Job Title</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline text-xl">work</span>
+</span>
+<input class="custom-input block w-full pl-12 pr-4 py-3.5 rounded-xl font-body-md text-body-md placeholder-outline-variant" id="target-role" placeholder="e.g. Senior Frontend Engineer, UX Manager" required="" type="text"/>
+</div>
+</div>
+<!-- Target Company / Context (Optional) -->
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="target-context">Target Company or Industry (Optional)</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline text-xl">corporate_fare</span>
+</span>
+<input class="custom-input block w-full pl-12 pr-4 py-3.5 rounded-xl font-body-md text-body-md placeholder-outline-variant" id="target-context" placeholder="e.g. Google, Tech Startup, Healthcare" type="text"/>
+</div>
+</div>
+<!-- Timeline Selection -->
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant block">Target Timeline</label>
+<div class="grid grid-cols-3 gap-4">
+<label class="border border-outline-variant/40 rounded-xl p-4 flex flex-col items-center gap-1 cursor-pointer hover:border-primary-container/60 hover:bg-surface-container-high transition-all">
+<input class="sr-only" name="timeline" type="radio" value="short"/>
+<span class="font-body-md text-body-md font-semibold text-on-surface">3-6 Months</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Immediate</span>
+</label>
+<label class="border border-primary-container/80 bg-primary-container/10 rounded-xl p-4 flex flex-col items-center gap-1 cursor-pointer hover:border-primary-container hover:bg-primary-container/15 transition-all">
+<input checked="" class="sr-only" name="timeline" type="radio" value="mid"/>
+<span class="font-body-md text-body-md font-semibold text-on-surface">6-12 Months</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Recommended</span>
+</label>
+<label class="border border-outline-variant/40 rounded-xl p-4 flex flex-col items-center gap-1 cursor-pointer hover:border-primary-container/60 hover:bg-surface-container-high transition-all">
+<input class="sr-only" name="timeline" type="radio" value="long"/>
+<span class="font-body-md text-body-md font-semibold text-on-surface">1-2 Years</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Long-term</span>
+</label>
+</div>
+</div>
+<!-- Actions -->
+<div class="pt-4 flex gap-4">
+<button class="flex-1 bg-surface-container-low border border-outline-variant/40 hover:bg-surface-container-high hover:border-outline-variant text-on-surface font-body-md text-body-md py-3.5 rounded-xl transition-colors font-semibold" type="button">
+            Back
+          </button>
+<button class="flex-2 bg-gradient-btn text-white font-body-md text-body-md font-semibold py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg flex items-center justify-center gap-2" type="submit">
+            Start Analysis
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+</div>
+</form>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>History - SkillMap</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffdcbf",
+                        "on-secondary-container": "#bdadff",
+                        "on-secondary-fixed-variant": "#4a21be",
+                        "on-tertiary-fixed-variant": "#6a3b00",
+                        "primary-fixed-dim": "#acc7ff",
+                        "on-error": "#690005",
+                        "tertiary": "#ffb873",
+                        "surface-container-low": "#161b29",
+                        "on-primary-container": "#00285b",
+                        "error-container": "#93000a",
+                        "on-background": "#dee2f5",
+                        "background": "#0e1320",
+                        "on-primary": "#002f68",
+                        "on-surface-variant": "#c2c6d5",
+                        "surface-bright": "#343948",
+                        "inverse-primary": "#005bbf",
+                        "surface-tint": "#acc7ff",
+                        "primary": "#acc7ff",
+                        "surface-variant": "#303443",
+                        "tertiary-fixed-dim": "#ffb873",
+                        "surface": "#0e1320",
+                        "on-secondary-fixed": "#1d0061",
+                        "error": "#ffb4ab",
+                        "surface-container-highest": "#303443",
+                        "secondary": "#cbbeff",
+                        "on-tertiary": "#4b2800",
+                        "inverse-on-surface": "#2b303e",
+                        "surface-container": "#1a1f2d",
+                        "on-primary-fixed-variant": "#004492",
+                        "secondary-fixed": "#e6deff",
+                        "primary-fixed": "#d7e2ff",
+                        "on-secondary": "#330099",
+                        "outline": "#8c909e",
+                        "surface-container-lowest": "#090e1b",
+                        "on-primary-fixed": "#001a40",
+                        "tertiary-container": "#d37b02",
+                        "surface-container-high": "#252a38",
+                        "on-tertiary-container": "#412200",
+                        "outline-variant": "#424753",
+                        "inverse-surface": "#dee2f5",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#cbbeff",
+                        "primary-container": "#508ff8",
+                        "surface-dim": "#0e1320",
+                        "on-tertiary-fixed": "#2d1600",
+                        "on-surface": "#dee2f5",
+                        "secondary-container": "#4d24c0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit-sm": "8px",
+                        "margin-desktop": "40px",
+                        "unit-md": "16px",
+                        "sidebar-width": "280px",
+                        "unit-lg": "24px",
+                        "gutter": "24px",
+                        "unit-xs": "4px",
+                        "unit-xl": "32px",
+                        "margin-mobile": "16px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #acc7ff, #cbbeff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .bg-gradient-btn {
+            background: linear-gradient(135deg, #508ff8 0%, #4d24c0 100%);
+        }
+        .bg-gradient-btn:hover {
+            background: linear-gradient(135deg, #427ce3 0%, #3e1b9b 100%);
+        }
+        .custom-input {
+            background-color: rgba(14, 19, 32, 0.5);
+            border: 1px solid rgba(140, 144, 158, 0.3);
+            color: #dee2f5;
+            transition: all 0.2s ease;
+        }
+        .custom-input:focus {
+            border-color: #508ff8;
+            box-shadow: 0 0 0 1px #508ff8, 0 0 15px rgba(80, 143, 248, 0.2);
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex font-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-[280px] border-r border-outline-variant/20 bg-surface-container-low shadow-sm flex flex-col py-unit-lg px-unit-md z-50 hidden md:flex">
+<!-- Header -->
+<div class="flex items-center gap-3 mb-unit-xl px-2">
+<span class="font-headline-md text-headline-md font-bold tracking-tight text-on-surface">SkillMap</span>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 rounded-full bg-surface-container text-on-surface" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<!-- CTA -->
+<div class="mt-auto mb-unit-lg">
+<button class="w-full bg-gradient-btn text-white font-label-md text-label-md py-3 rounded-full hover:opacity-90 transition-opacity">
+                Analyze Skills
+            </button>
+</div>
+<!-- Footer -->
+<div class="pt-4 border-t border-outline-variant/20">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow md:ml-[280px] p-margin-mobile md:p-margin-desktop min-h-screen relative">
+<!-- Header -->
+<div class="mb-unit-xl flex justify-between items-center">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Analysis History</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">View and manage your past skill analyses.</p>
+</div>
+<button class="md:hidden text-on-surface p-2 hover:bg-surface-container rounded-lg">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<!-- History Content -->
+<div class="max-w-container-max-width mx-auto">
+<div class="glass-panel rounded-2xl overflow-hidden border border-outline-variant/10">
+<!-- Table Header (hidden on mobile) -->
+<div class="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-surface-container-high/50 border-b border-outline-variant/10 font-label-md text-label-md text-on-surface-variant">
+<div class="col-span-4">Target Role</div>
+<div class="col-span-2">Date Analyzed</div>
+<div class="col-span-2">Match Score</div>
+<div class="col-span-2">Timeline</div>
+<div class="col-span-2 text-right">Actions</div>
+</div>
+<!-- History List -->
+<div class="divide-y divide-outline-variant/10">
+<!-- Item 1 -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 hover:bg-surface-container-low/30 transition-colors items-center">
+<div class="col-span-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<div>
+<span class="font-body-md text-body-md font-semibold text-on-surface block">Senior Frontend Engineer</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Google • Software Engineering</span>
+</div>
+</div>
+<div class="col-span-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="md:hidden font-label-md text-label-md block mb-1">Date Analyzed</span>
+                                Jun 10, 2024
+                            </div>
+<div class="col-span-2">
+<span class="md:hidden font-label-md text-label-md block mb-1">Match Score</span>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md font-semibold text-primary">85%</span>
+<div class="w-16 bg-outline-variant/20 rounded-full h-1.5 hidden md:block">
+<div class="bg-primary h-1.5 rounded-full" style="width: 85%"></div>
+</div>
+</div>
+</div>
+<div class="col-span-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="md:hidden font-label-md text-label-md block mb-1">Timeline</span>
+                                6 Months
+                            </div>
+<div class="col-span-2 flex justify-start md:justify-end gap-2">
+<button class="px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md font-semibold rounded-lg transition-colors">
+                                View
+                            </button>
+<button class="p-2 text-on-surface-variant hover:text-error hover:bg-error/10 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 hover:bg-surface-container-low/30 transition-colors items-center">
+<div class="col-span-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<div>
+<span class="font-body-md text-body-md font-semibold text-on-surface block">Product Manager</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tech Startup • Product</span>
+</div>
+</div>
+<div class="col-span-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="md:hidden font-label-md text-label-md block mb-1">Date Analyzed</span>
+                                May 28, 2024
+                            </div>
+<div class="col-span-2">
+<span class="md:hidden font-label-md text-label-md block mb-1">Match Score</span>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md font-semibold text-secondary">62%</span>
+<div class="w-16 bg-outline-variant/20 rounded-full h-1.5 hidden md:block">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 62%"></div>
+</div>
+</div>
+</div>
+<div class="col-span-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="md:hidden font-label-md text-label-md block mb-1">Timeline</span>
+                                12 Months
+                            </div>
+<div class="col-span-2 flex justify-start md:justify-end gap-2">
+<button class="px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md font-semibold rounded-lg transition-colors">
+                                View
+                            </button>
+<button class="p-2 text-on-surface-variant hover:text-error hover:bg-error/10 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
