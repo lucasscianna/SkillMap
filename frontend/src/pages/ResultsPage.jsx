@@ -242,20 +242,13 @@ function ResultsPage() {
 
               {/* Export actions */}
               <div className="glass-panel rounded-2xl p-6 flex flex-col gap-3 bg-[#0f1628]/60">
-                <button
-                  onClick={() => alert('Link copied to clipboard!')}
-                  className="w-full bg-surface-container-low border border-outline-variant/30 hover:bg-surface-container-high hover:border-outline-variant text-on-surface font-sans text-sm font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                <Link
+                  to={`/export/${id}`}
+                  className="w-full bg-gradient-btn text-white font-sans text-sm font-semibold py-3.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer text-center"
                 >
-                  <span className="material-symbols-outlined text-xl">share</span>
-                  Share Report
-                </button>
-                <button
-                  onClick={() => window.print()}
-                  className="w-full bg-surface-container-low border border-outline-variant/30 hover:bg-surface-container-high hover:border-outline-variant text-on-surface font-sans text-sm font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-xl">download</span>
-                  Export Roadmap
-                </button>
+                  <span className="material-symbols-outlined text-xl">picture_as_pdf</span>
+                  <span>Export & Share Roadmap</span>
+                </Link>
               </div>
             </div>
           </div>

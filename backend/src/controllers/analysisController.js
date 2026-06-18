@@ -151,7 +151,7 @@ const getHistory = async (req, res) => {
   try {
     const userId = req.user.id;
     const result = await db.query(
-      'SELECT id, target_input, created_at FROM analyses WHERE user_id = $1 ORDER BY created_at DESC',
+      'SELECT id, target_input, gap_result, roadmap, created_at FROM analyses WHERE user_id = $1 ORDER BY created_at DESC',
       [userId]
     );
 

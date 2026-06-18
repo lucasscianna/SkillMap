@@ -92,3 +92,33 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+@media print {
+  body, html {
+    background-color: white !important;
+    color: #0f1628 !important;
+  }
+  header,
+  .no-print,
+  button,
+  .glass-panel:not(.print-card) {
+    display: none !important;
+  }
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: auto !important;
+  }
+  .print-card {
+    background: white !important;
+    color: #0f1628 !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+

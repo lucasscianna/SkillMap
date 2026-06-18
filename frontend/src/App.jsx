@@ -3,6 +3,8 @@ import AuthForm from './components/AuthForm';
 import ProfilePage from './pages/ProfilePage';
 import AnalysisPage from './pages/AnalysisPage';
 import ResultsPage from './pages/ResultsPage';
+import HistoryPage from './pages/HistoryPage';
+import ExportPage from './pages/ExportPage';
 
 /**
  * Root application component.
@@ -56,6 +58,22 @@ function App() {
           element={
             <ProtectedRoute>
               <ResultsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/history"
+          element={
+            <ProtectedRoute>
+              <HistoryPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/export/:id"
+          element={
+            <ProtectedRoute>
+              <ExportPage />
             </ProtectedRoute>
           }
         />

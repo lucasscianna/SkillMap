@@ -40,24 +40,6 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-app.get('/api/ai-test', async (req, res) => {
-  try {
-    const provider = (process.env.AI_PROVIDER || 'gemini').toLowerCase();
-    let aiService;
-    if (provider === 'ollama') {
-      aiService = require('./services/ollamaService');
-    } else {
-      aiService = require('./services/geminiService');
-    }
-
-    const mockProfile = { skills: ['JS'], education: 'None', experience: 'None' };
-    const result = await aiService.analyzeGap(mockProfile, 'Backend Developer');
-    res.json({ status: 'success', provider, result });
-  } catch (err) {
-    res.status(200).json({ status: 'error', message: err.message, stack: err.stack });
-  }
-});
-
 /**
  * Global error handler.
  * Catches unhandled errors and returns a consistent JSON response.
@@ -68,8 +50,10 @@ app.use((err, req, res, next) => {
   res.status(status).json({ error: message });
 });
 
-app.listen(PORT, () => {
-  console.log(`SkillMap API running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`SkillMap API running on port ${PORT}`);
+  });
+}
 
 module.exports = app;
