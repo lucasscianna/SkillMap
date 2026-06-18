@@ -45,7 +45,8 @@ const register = async (req, res) => {
 
     return res.status(201).json({ token, user: { id: user.id, email: user.email } });
   } catch (err) {
-    return res.status(500).json({ error: 'Registration failed. Please try again.' });
+    console.error('Registration error:', err);
+    return res.status(500).json({ error: `Registration failed: ${err.message}` });
   }
 };
 
@@ -85,7 +86,8 @@ const login = async (req, res) => {
 
     return res.json({ token, user: { id: user.id, email: user.email } });
   } catch (err) {
-    return res.status(500).json({ error: 'Login failed. Please try again.' });
+    console.error('Login error:', err);
+    return res.status(500).json({ error: `Login failed: ${err.message}` });
   }
 };
 

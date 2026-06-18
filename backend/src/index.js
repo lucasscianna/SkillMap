@@ -2,21 +2,35 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-const authRoutes = require('./routes/auth');
-const profileRoutes = require('./routes/profile');
-const analysisRoutes = require('./routes/analysis');
-
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // --- Middleware ---
 app.use(cors());
 app.use(express.json());
 
-// --- Routes ---
-app.use('/api/auth', authRoutes);
-app.use('/api/profile', profileRoutes);
-app.use('/api/analysis', analysisRoutes);
+// --- Cache Buster for Dynamic Code Reloading ---
+app.use((req, res, next) => {
+  for (const key in require.cache) {
+    if (key.includes('/src/')) {
+      delete require.cache[key];
+    }
+  }
+  next();
+});
+
+// --- Routes (Dynamically Loaded) ---
+app.use('/api/auth', (req, res, next) => {
+  require('./routes/auth')(req, res, next);
+});
+
+app.use('/api/profile', (req, res, next) => {
+  require('./routes/profile')(req, res, next);
+});
+
+app.use('/api/analysis', (req, res, next) => {
+  require('./routes/analysis')(req, res, next);
+});
 
 /**
  * Health check endpoint.
@@ -24,6 +38,24 @@ app.use('/api/analysis', analysisRoutes);
  */
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.get('/api/ai-test', async (req, res) => {
+  try {
+    const provider = (process.env.AI_PROVIDER || 'gemini').toLowerCase();
+    let aiService;
+    if (provider === 'ollama') {
+      aiService = require('./services/ollamaService');
+    } else {
+      aiService = require('./services/geminiService');
+    }
+
+    const mockProfile = { skills: ['JS'], education: 'None', experience: 'None' };
+    const result = await aiService.analyzeGap(mockProfile, 'Backend Developer');
+    res.json({ status: 'success', provider, result });
+  } catch (err) {
+    res.status(200).json({ status: 'error', message: err.message, stack: err.stack });
+  }
 });
 
 /**

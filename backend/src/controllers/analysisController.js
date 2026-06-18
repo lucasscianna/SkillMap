@@ -1,10 +1,22 @@
 const db = require('../db');
 const geminiService = require('../services/geminiService');
+const ollamaService = require('../services/ollamaService');
+
+/**
+ * Get the AI service provider based on env config.
+ */
+const getAiService = () => {
+  const provider = (process.env.AI_PROVIDER || 'gemini').toLowerCase();
+  if (provider === 'ollama') {
+    return ollamaService;
+  }
+  return geminiService;
+};
 
 /**
  * Create a new career gap analysis.
  * 1. Fetch user's profile.
- * 2. Send profile + target to Gemini API.
+ * 2. Send profile + target to active AI API.
  * 3. Store analysis and suggested resources.
  * 
  * @route POST /api/analysis
@@ -13,7 +25,7 @@ const geminiService = require('../services/geminiService');
  */
 const createAnalysis = async (req, res) => {
   const userId = req.user.id;
-  const { target } = req.body;
+  const target = req.body.target || req.body.targetInput;
 
   if (!target || typeof target !== 'string' || !target.trim()) {
     return res.status(400).json({ error: 'Target career goal or job description is required.' });
@@ -34,8 +46,9 @@ const createAnalysis = async (req, res) => {
 
     const profile = profileResult.rows[0];
 
-    // 2. Call Gemini Service
-    const analysisResult = await geminiService.analyzeGap(profile, target.trim());
+    // 2. Call active AI Service
+    const aiService = getAiService();
+    const analysisResult = await aiService.analyzeGap(profile, target.trim());
     const { gaps, roadmap, resources } = analysisResult;
 
     // 3. Save to database using a transaction

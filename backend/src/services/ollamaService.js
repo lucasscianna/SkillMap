@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const { getMockAnalysis } = require('./mockService');
 
 /**
- * Format the prompt to send to Gemini Flash API.
+ * Format the prompt to send to Ollama.
  */
 const formatPrompt = (profile, target) => {
   const skillsList = Array.isArray(profile.skills) ? profile.skills.join(', ') : '';
@@ -24,11 +24,11 @@ Respond ONLY in valid JSON with this exact structure:
   "roadmap": [{ "skill": string, "duration": string, "order": number }],
   "resources": [{ "skill": string, "title": string, "url": string, "type": "course"|"project"|"reading" }]
 }
-Return ONLY the JSON, no markdown formatting block, no explanation.`;
+Return ONLY the raw JSON output, without markdown formatting blocks or any extra conversation.`;
 };
 
 /**
- * Validate and parse the JSON response returned by the Gemini API.
+ * Validate and parse the JSON response returned by the Ollama API.
  */
 const parseResponse = (raw) => {
   try {
@@ -60,7 +60,7 @@ const parseResponse = (raw) => {
 };
 
 /**
- * Perform career gap analysis using Gemini Flash API.
+ * Perform career gap analysis using local Ollama model.
  */
 const analyzeGap = async (profile, target) => {
   // Dynamically reload .env file at runtime
@@ -76,53 +76,46 @@ const analyzeGap = async (profile, target) => {
     }
   }
 
-  try {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey || !apiKey.trim()) {
-      throw new Error('GEMINI_API_KEY is not defined or is empty in environment variables');
-    }
+  const baseUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
+  const modelName = process.env.OLLAMA_MODEL || 'llama3.2';
+  const prompt = formatPrompt(profile, target);
 
-    const prompt = formatPrompt(profile, target);
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: prompt,
-                },
-              ],
-            },
-          ],
-          generationConfig: {
-            responseMimeType: 'application/json',
+  try {
+    const response = await fetch(`${baseUrl}/api/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: modelName,
+        messages: [
+          {
+            role: 'user',
+            content: prompt,
           },
-        }),
-      }
-    );
+        ],
+        stream: false,
+        options: {
+          temperature: 0.1,
+        },
+      }),
+    });
 
     if (!response.ok) {
       const errText = await response.text();
-      console.warn(`Gemini API error: ${response.status} ${errText}. Falling back to mock analysis.`);
-      return getMockAnalysis(profile, target);
+      throw new Error(`Ollama API error: ${response.status} ${errText}`);
     }
 
     const data = await response.json();
-    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    const rawText = data.message?.content;
 
     if (!rawText) {
-      throw new Error('Empty response from Gemini API');
+      throw new Error('Empty response from local Ollama model');
     }
 
     return parseResponse(rawText);
   } catch (err) {
-    console.warn('Error calling Gemini API, falling back to local mock:', err.message);
+    console.warn(`Local Ollama connection failed or model was not found: ${err.message}. Falling back to high-quality local mock analysis.`);
     return getMockAnalysis(profile, target);
   }
 };
