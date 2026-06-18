@@ -81,7 +81,7 @@ export const updateProfile = (data) =>
  * @returns {Promise<Object>} Analysis result with gaps, roadmap, resources
  */
 export const createAnalysis = (targetInput) =>
-  api.post('/analysis', { targetInput }).then((res) => res.data);
+  api.post('/analysis', { target: targetInput }).then((res) => res.data);
 
 /**
  * Get a specific analysis by ID.
