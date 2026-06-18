@@ -528,3 +528,208 @@ Every major technology choice was made deliberately — here's what was consider
 | **Gemini Flash API (Google)** | OpenAI GPT-4 | Gemini Flash is free within its quota limits — critical for an MVP with zero budget. It's fast, handles structured text analysis well, and the Google AI SDK integrates cleanly with Node.js. GPT-4 is arguably more powerful, but the cost per request makes it impractical for development and testing at scale. |
 | **JWT** | Session-based auth | JWT is stateless — no server-side session storage needed. This simplifies the backend, scales naturally, and works seamlessly with a React SPA that sends tokens via headers. Sessions would require a store (Redis, DB) and add moving parts that aren't justified for this project. |
 | **Railway / Render** | AWS (EC2, RDS) | Railway and Render offer one-click deploys, free tiers for MVPs, and zero DevOps overhead. AWS is more powerful but wildly overkill for a solo project — configuring VPCs, security groups, and IAM roles is not where I should be spending my time during a 12-week build. |
+
+---
+
+## 🚀 Stage 4 — MVP Development
+
+### Task 0 — Sprint Plan
+
+The MVP is built across three one-week sprints. Each sprint has a clear scope and ships something testable. The goal is to keep momentum high and avoid scope creep — if a task doesn't serve the core loop (profile → target → analysis → roadmap), it waits.
+
+#### Sprint Overview
+
+| Sprint | Duration | Goals | Key Tasks | Status |
+|--------|----------|-------|-----------|--------|
+| Sprint 1 — Foundation | Week 1 | Project scaffolding, database setup, authentication | Repo setup (folder structure, ESLint, Prettier), Node.js + Express init, PostgreSQL setup + migrations (users, profiles, analyses, resources), JWT auth: `POST /api/auth/register` + `POST /api/auth/login`, React app init + `AuthForm` component | 🔄 In Progress |
+| Sprint 2 — Core Feature | Week 2 | Profile management, AI integration, full frontend | `GET/PUT /api/profile`, `POST /api/analysis` (Gemini Flash integration), `GET /api/analysis/:id` + `GET /api/analysis/history`, React: `ProfileForm`, `TargetInput`, `AnalysisLoader`, `RoadmapDisplay`, `ResourceCard`, frontend ↔ backend connection | ⏳ Upcoming |
+| Sprint 3 — Polish & QA | Week 3 | History, export, testing, deployment | `AnalysisHistory`, `ExportButton` (PDF + shareable link), Jest unit tests (GeminiService, auth controllers), React Testing Library (`ProfileForm`, `RoadmapDisplay`), Postman API testing, bug fixes, deployment to Railway/Render | ⏳ Upcoming |
+
+#### Detailed Task Breakdown
+
+| Task | Sprint | Priority | Status |
+|------|--------|----------|--------|
+| Init Node.js/Express project structure | Sprint 1 | Must Have | ⏳ |
+| Setup PostgreSQL + run migrations | Sprint 1 | Must Have | ⏳ |
+| Implement JWT auth (register + login) | Sprint 1 | Must Have | ⏳ |
+| Init React app + routing | Sprint 1 | Must Have | ⏳ |
+| Build AuthForm component | Sprint 1 | Must Have | ⏳ |
+| Implement profile endpoints (GET/PUT) | Sprint 2 | Must Have | ⏳ |
+| Integrate Gemini Flash API | Sprint 2 | Must Have | ⏳ |
+| Implement analysis endpoint (POST) | Sprint 2 | Must Have | ⏳ |
+| Build ProfileForm + TargetInput | Sprint 2 | Must Have | ⏳ |
+| Build RoadmapDisplay + ResourceCard | Sprint 2 | Must Have | ⏳ |
+| Connect frontend to backend | Sprint 2 | Must Have | ⏳ |
+| Build AnalysisHistory + ExportButton | Sprint 3 | Should Have | ⏳ |
+| Write Jest unit tests | Sprint 3 | Should Have | ⏳ |
+| Manual QA (full user flow) | Sprint 3 | Must Have | ⏳ |
+| Deploy to Railway/Render | Sprint 3 | Must Have | ⏳ |
+| Final bug fixes | Sprint 3 | Must Have | ⏳ |
+
+---
+
+### Task 1 — Development Standards
+
+#### Source Control
+
+Each feature gets its own branch: `feature/auth`, `feature/profile`, `feature/analysis`, and so on. No code lands on `develop` without a pull request — even solo, the PR step forces a pause to re-read before merging. Direct pushes to `main` are never allowed. All commits follow the [Conventional Commits](https://www.conventionalcommits.org/) format: `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`.
+
+#### Quality Assurance
+
+Jest runs on every push via GitHub Actions — if tests break, nothing merges. Each API endpoint is tested manually with Postman during development (both happy path and error cases). At the end of every sprint, the full user flow is tested manually end to end: register → profile → analysis → roadmap → export. No sprint closes without that full walkthrough passing.
+
+---
+
+### Task 2 — Progress Tracking
+
+#### Sprint Metrics
+
+| Sprint | Planned Tasks | Completed | Velocity | Bug Count |
+|--------|:------------:|:---------:|:--------:|:---------:|
+| Sprint 1 | 5 | — | — | — |
+| Sprint 2 | 6 | — | — | — |
+| Sprint 3 | 5 | — | — | — |
+
+Metrics are filled in at the end of each sprint. Velocity is measured as the number of tasks completed versus planned — a simple ratio that keeps things honest without overcomplicating tracking.
+
+**Tools:** [GitHub Projects](https://github.com/users/lucasscianna/projects) for the kanban board and sprint planning. [GitHub Issues](https://github.com/lucasscianna/SkillMap/issues) for bug tracking and task-level detail.
+
+---
+
+### Task 3 — Sprint Reviews & Retrospectives
+
+Each sprint ends with a short retrospective — three questions, honest answers. The goal isn't to write a report; it's to adjust course before the next sprint starts.
+
+<details>
+<summary><strong>Sprint 1 — Retrospective</strong></summary>
+
+**What went well?**
+
+_To be filled after Sprint 1._
+
+**What didn't go well?**
+
+_To be filled after Sprint 1._
+
+**What will I improve next sprint?**
+
+_To be filled after Sprint 1._
+
+</details>
+
+<details>
+<summary><strong>Sprint 2 — Retrospective</strong></summary>
+
+**What went well?**
+
+_To be filled after Sprint 2._
+
+**What didn't go well?**
+
+_To be filled after Sprint 2._
+
+**What will I improve next sprint?**
+
+_To be filled after Sprint 2._
+
+</details>
+
+<details>
+<summary><strong>Sprint 3 — Retrospective</strong></summary>
+
+**What went well?**
+
+_To be filled after Sprint 3._
+
+**What didn't go well?**
+
+_To be filled after Sprint 3._
+
+**What will I improve next sprint?**
+
+_To be filled after Sprint 3._
+
+</details>
+
+---
+
+### Task 4 — Final Integration & QA
+
+A full checklist to validate before considering the MVP done. Every box needs to be checked before the final merge into `main`.
+
+#### Backend
+
+- [ ] All API endpoints return correct status codes
+- [ ] JWT auth works on all protected routes
+- [ ] Gemini Flash returns structured JSON consistently
+- [ ] PostgreSQL queries perform correctly
+- [ ] No raw CV/profile data stored beyond session
+
+#### Frontend
+
+- [ ] Full user flow works end to end (register → profile → analysis → roadmap)
+- [ ] RoadmapDisplay renders correctly for all priority levels
+- [ ] Export generates valid PDF
+- [ ] Shareable link opens correctly without auth
+
+#### QA
+
+- [ ] Jest unit tests pass (GeminiService, auth)
+- [ ] React Testing Library tests pass
+- [ ] All Postman tests pass
+- [ ] Manual flow tested on Chrome, Firefox, Safari
+
+---
+
+### Task 5 — Deliverables
+
+| Deliverable | Link | Status |
+|-------------|------|--------|
+| GitHub Repository | [lucasscianna/SkillMap](https://github.com/lucasscianna/SkillMap) | ✅ |
+| Sprint Planning | [GitHub Projects](#) | ⏳ |
+| Bug Tracking | [GitHub Issues](#) | ⏳ |
+| Production Environment | [skillmap on Railway](#) | ⏳ |
+| Sprint 1 Review | [View notes](#) | ⏳ |
+| Sprint 2 Review | [View notes](#) | ⏳ |
+| Sprint 3 Review | [View notes](#) | ⏳ |
+| Testing Evidence | [View Postman results](#) | ⏳ |
+
+---
+
+### Task 6 — Technical Manual Review Prep
+
+A checklist to go through before the final technical review. The goal is to walk in prepared — no surprises, no scrambling to find a diagram or explain a decision on the spot.
+
+#### Application
+
+- [ ] MVP is fully functional with no critical bugs
+- [ ] Full user flow works from registration to roadmap export
+- [ ] App is deployed and accessible via public URL
+
+#### Documentation
+
+- [ ] README covers architecture, ERD, API specs, mockups, sprint plan
+- [ ] Code is commented on all critical functions
+- [ ] Commit history is clean and follows Conventional Commits
+
+#### Diagrams to Present
+
+- [ ] System architecture diagram (Mermaid in README)
+- [ ] ERD / database diagram (Mermaid in README)
+- [ ] Sequence diagrams for key flows
+
+#### Technical Concepts to Be Ready to Explain
+
+- [ ] JWT authentication and token lifecycle
+- [ ] Password hashing (bcrypt)
+- [ ] PostgreSQL relations (users → profiles → analyses → resources)
+- [ ] REST API design and HTTP status codes
+- [ ] React component architecture and state management
+- [ ] Gemini Flash prompt engineering
+- [ ] Git branching strategy and PR workflow
+
+#### Testing
+
+- [ ] Ready to show Jest test results
+- [ ] Ready to demo Postman API tests
+- [ ] Ready to walk through manual QA flow live
