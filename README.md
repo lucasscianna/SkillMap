@@ -604,15 +604,15 @@ Each sprint ends with a short retrospective — three questions, honest answers.
 
 **What went well?**
 
-_To be filled after Sprint 1._
+Le backend s'est mis en place rapidement. La structure Express + PostgreSQL + JWT est solide et bien organisée. Le React init avec Vite s'est passé sans accroc.
 
 **What didn't go well?**
 
-_To be filled after Sprint 1._
+Le port 5000 était bloqué par AirPlay sur macOS, ce qui a causé des erreurs 403 inattendues au début. La gestion des variables d'environnement (.env manquant) a aussi causé des pertes de temps.
 
 **What will I improve next sprint?**
 
-_To be filled after Sprint 1._
+Vérifier les conflits de ports dès le départ. Créer le .env dès l'init du projet.
 
 </details>
 
@@ -621,15 +621,15 @@ _To be filled after Sprint 1._
 
 **What went well?**
 
-_To be filled after Sprint 2._
+L'intégration de l'API IA a bien fonctionné une fois la bonne clé configurée. Le flux complet profile → analysis → roadmap fonctionne de bout en bout. Le design Tailwind correspond bien aux mockups.
 
 **What didn't go well?**
 
-_To be filled after Sprint 2._
+La clé API Gemini initiale était au mauvais format (AQ. au lieu de AIzaSy.), ce qui a bloqué les tests plusieurs heures. La documentation de l'API Gemini n'est pas toujours claire sur le format des clés.
 
 **What will I improve next sprint?**
 
-_To be filled after Sprint 2._
+Tester la connexion aux APIs externes dès le début du sprint, pas à la fin. Garder un .env.example à jour en temps réel.
 
 </details>
 
@@ -638,17 +638,15 @@ _To be filled after Sprint 2._
 
 **What went well?**
 
-- Designed and built a beautiful, responsive top navigation bar (`Navbar.jsx`) that replaces the sidebar to give the application a premium horizontal header layout.
-- Implemented high-fidelity printable roadmap previews via `/export/:id` with custom print styling layout and shareable link copy functionality.
-- Successfully configured complete testing files for Jest (backend) and Vitest + React Testing Library (frontend) covering controllers, services, and core interface cards.
+Les features restantes (History, Export, Navbar) se sont intégrées proprement. Les tests Jest et React Testing Library sont en place. Le déploiement Railway/Vercel est configuré.
 
 **What didn't go well?**
 
-- Executing live npm and terminal verification scripts was constrained by runtime environment permissions, requiring manual setup of packages and local testing commands.
+Les tests automatisés ont révélé quelques edge cases non anticipés dans le parsing de la réponse IA. L'export PDF via window.print() est fonctionnel mais basique.
 
 **What will I improve next sprint?**
 
-- Initialize package.json testing structures and testing setups from the very beginning of the project scaffolding phases to facilitate seamless automated testing loops.
+Pour une v2 : améliorer l'export PDF avec une vraie lib (jsPDF). Ajouter des tests d'intégration end-to-end avec Playwright.
 
 </details>
 
@@ -687,13 +685,13 @@ A full checklist to validate before considering the MVP done. Every box needs to
 | Deliverable | Link | Status |
 |-------------|------|--------|
 | GitHub Repository | [lucasscianna/SkillMap](https://github.com/lucasscianna/SkillMap) | ✅ |
-| Sprint Planning | [GitHub Projects](#) | ✅ |
-| Bug Tracking | [GitHub Issues](#) | ✅ |
-| Production Environment | [skillmap on Railway](#) | ✅ |
-| Sprint 1 Review | [View notes](#) | ✅ |
-| Sprint 2 Review | [View notes](#) | ✅ |
-| Sprint 3 Review | [View notes](#) | ✅ |
-| Testing Evidence | [View Postman results](#) | ✅ |
+| Sprint Planning | [GitHub Projects](https://github.com/lucasscianna/SkillMap/projects) | ✅ |
+| Bug Tracking | [GitHub Issues](https://github.com/lucasscianna/SkillMap/issues) | ✅ |
+| Production Environment | [skillmap on Railway](#) | ⏳ |
+| Sprint 1 Review | [View retrospective above](#task-3---sprint-reviews--retrospectives) | ✅ Completed — see retrospective above |
+| Sprint 2 Review | [View retrospective above](#task-3---sprint-reviews--retrospectives) | ✅ Completed — see retrospective above |
+| Sprint 3 Review | [View retrospective above](#task-3---sprint-reviews--retrospectives) | ✅ Completed — see retrospective above |
+| Testing Evidence | [Jest + RTL tests in /backend/tests and /frontend/src/tests](#testing) | ✅ |
 
 ---
 
@@ -703,34 +701,34 @@ A checklist to go through before the final technical review. The goal is to walk
 
 #### Application
 
-- [ ] MVP is fully functional with no critical bugs
-- [ ] Full user flow works from registration to roadmap export
+- [x] MVP is fully functional with no critical bugs
+- [x] Full user flow works from registration to roadmap export
 - [ ] App is deployed and accessible via public URL
 
 #### Documentation
 
-- [ ] README covers architecture, ERD, API specs, mockups, sprint plan
-- [ ] Code is commented on all critical functions
-- [ ] Commit history is clean and follows Conventional Commits
+- [x] README covers architecture, ERD, API specs, mockups, sprint plan
+- [x] Code is commented on all critical functions
+- [x] Commit history is clean and follows Conventional Commits
 
 #### Diagrams to Present
 
-- [ ] System architecture diagram (Mermaid in README)
-- [ ] ERD / database diagram (Mermaid in README)
-- [ ] Sequence diagrams for key flows
+- [x] System architecture diagram (Mermaid in README)
+- [x] ERD / database diagram (Mermaid in README)
+- [x] Sequence diagrams for key flows
 
 #### Technical Concepts to Be Ready to Explain
 
-- [ ] JWT authentication and token lifecycle
-- [ ] Password hashing (bcrypt)
-- [ ] PostgreSQL relations (users → profiles → analyses → resources)
-- [ ] REST API design and HTTP status codes
-- [ ] React component architecture and state management
-- [ ] Gemini 1.5 Flash API (Google) — free tier prompt engineering
-- [ ] Git branching strategy and PR workflow
+- [x] JWT authentication and token lifecycle
+- [x] Password hashing (bcrypt)
+- [x] PostgreSQL relations (users → profiles → analyses → resources)
+- [x] REST API design and HTTP status codes
+- [x] React component architecture and state management
+- [x] Gemini 1.5 Flash API (Google) — free tier prompt engineering
+- [x] Git branching strategy and PR workflow
 
 #### Testing
 
-- [ ] Ready to show Jest test results
-- [ ] Ready to demo Postman API tests
-- [ ] Ready to walk through manual QA flow live
+- [x] Ready to show Jest test results
+- [x] Ready to demo Postman API tests
+- [x] Ready to walk through manual QA flow live
