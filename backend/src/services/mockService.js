@@ -10,24 +10,24 @@ const getMockAnalysis = (profile, target) => {
   
   if (targetLower.includes('chef') || targetLower.includes('cook') || targetLower.includes('restaurant') || targetLower.includes('hospitality') || targetLower.includes('culinary') || targetLower.includes('hotel') || targetLower.includes('waiter')) {
     gaps = [
-      { skill: 'Food Safety & HACCP Compliance', priority: 'high' },
-      { skill: 'Restaurant Operations & Cost Control', priority: 'high' },
-      { skill: 'Staff Management & Scheduling', priority: 'medium' },
-      { skill: 'Customer Service & Hospitality Standards', priority: 'medium' },
+      { skill: 'Hospitality & Restaurant Management Degree', priority: 'high' },
+      { skill: 'Food Safety & HACCP Manager Certification', priority: 'high' },
+      { skill: 'Restaurant Operations & Cost Control', priority: 'medium' },
+      { skill: 'Staff Scheduling & Team Leadership', priority: 'medium' },
       { skill: 'Inventory & Supply Chain Management', priority: 'low' }
     ];
     roadmap = [
-      { skill: 'Food Safety & HACCP Compliance', duration: '1-2 weeks', order: 1 },
-      { skill: 'Restaurant Operations & Cost Control', duration: '2-3 weeks', order: 2 },
-      { skill: 'Staff Management & Scheduling', duration: '1-2 weeks', order: 3 },
-      { skill: 'Customer Service & Hospitality Standards', duration: '1 week', order: 4 },
-      { skill: 'Inventory & Supply Chain Management', duration: '1-2 weeks', order: 5 }
+      { skill: 'Hospitality & Restaurant Management Degree', duration: '12-18 months', order: 1 },
+      { skill: 'Food Safety & HACCP Manager Certification', duration: '2-3 months', order: 2 },
+      { skill: 'Restaurant Operations & Cost Control', duration: '1-2 months', order: 3 },
+      { skill: 'Staff Scheduling & Team Leadership', duration: '4-6 weeks', order: 4 },
+      { skill: 'Inventory & Supply Chain Management', duration: '2-4 weeks', order: 5 }
     ];
     resources = [
-      { skill: 'Food Safety & HACCP Compliance', title: 'ServSafe Manager Certification Course', url: 'https://www.servsafe.com/', type: 'course' },
+      { skill: 'Hospitality & Restaurant Management Degree', title: 'Associate Degree in Hospitality Management', url: 'https://www.coursera.org/', type: 'course' },
+      { skill: 'Food Safety & HACCP Manager Certification', title: 'ServSafe Manager Certification Course', url: 'https://www.servsafe.com/', type: 'course' },
       { skill: 'Restaurant Operations & Cost Control', title: 'Restaurant Management & Operations Guide', url: 'https://www.restaurantowner.com/', type: 'reading' },
-      { skill: 'Staff Management & Scheduling', title: 'Staff Scheduling Best Practices', url: 'https://7shifts.com/blog/', type: 'reading' },
-      { skill: 'Customer Service & Hospitality Standards', title: 'Hospitality Management Program', url: 'https://www.coursera.org/', type: 'course' },
+      { skill: 'Staff Scheduling & Team Leadership', title: 'Staff Scheduling Best Practices', url: 'https://7shifts.com/blog/', type: 'reading' },
       { skill: 'Inventory & Supply Chain Management', title: 'Restaurant Inventory Spreadsheet Project', url: 'https://www.microsoft.com/excel', type: 'project' }
     ];
   } else if (targetLower.includes('fullstack') || targetLower.includes('full-stack') || targetLower.includes('frontend') || targetLower.includes('backend') || targetLower.includes('developer') || targetLower.includes('engineer')) {

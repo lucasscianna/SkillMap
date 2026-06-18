@@ -17,6 +17,12 @@ Given the user profile and career target below, identify the skill gaps and gene
 The target role can be in ANY field : cooking, healthcare, design, management, finance, education, hospitality, engineering, arts, or any other domain.
 Ensure that recommendations are domain-specific and directly relevant to the target career sector. Do NOT suggest technical IT/programming/cloud skills unless the target role itself is explicitly in the technology sector (e.g. do not recommend database management or coding courses to a restaurant manager or culinary chef).
 
+Structure the roadmap chronologically according to a realistic timeline hierarchy:
+1. Major Foundation Gaps (e.g. University Degrees, Professional Diplomas, or major state licenses): These must be scheduled as the first steps (e.g., order 1, 2) and have long-term durations (e.g., '12-24 months' or '1-2 years'). Always suggest professional degrees or diplomas if there is a major gap to bridge.
+2. Intermediate Verification Gaps (e.g. Specific Professional Certifications, bootcamp courses): These must have mid-term durations (e.g., '2-3 months' or '4-6 weeks').
+3. Short-term Application Gaps (e.g. Focused reading, tutorials, small hands-on projects): These should have short-term durations (e.g., '2-4 weeks' or '1-2 weeks').
+Timelines must be highly realistic for a career transition. Under no circumstances should complex gaps like restaurant operations management or healthcare compliance be scheduled to be completed in just 1-2 weeks.
+
 Profile:
 - Skills: ${skillsList}
 - Education: ${education}
