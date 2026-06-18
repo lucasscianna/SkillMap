@@ -8,7 +8,29 @@ const getMockAnalysis = (profile, target) => {
   let roadmap = [];
   let resources = [];
   
-  if (targetLower.includes('fullstack') || targetLower.includes('full-stack') || targetLower.includes('frontend') || targetLower.includes('backend') || targetLower.includes('developer') || targetLower.includes('engineer')) {
+  if (targetLower.includes('chef') || targetLower.includes('cook') || targetLower.includes('restaurant') || targetLower.includes('hospitality') || targetLower.includes('culinary') || targetLower.includes('hotel') || targetLower.includes('waiter')) {
+    gaps = [
+      { skill: 'Food Safety & HACCP Compliance', priority: 'high' },
+      { skill: 'Restaurant Operations & Cost Control', priority: 'high' },
+      { skill: 'Staff Management & Scheduling', priority: 'medium' },
+      { skill: 'Customer Service & Hospitality Standards', priority: 'medium' },
+      { skill: 'Inventory & Supply Chain Management', priority: 'low' }
+    ];
+    roadmap = [
+      { skill: 'Food Safety & HACCP Compliance', duration: '1-2 weeks', order: 1 },
+      { skill: 'Restaurant Operations & Cost Control', duration: '2-3 weeks', order: 2 },
+      { skill: 'Staff Management & Scheduling', duration: '1-2 weeks', order: 3 },
+      { skill: 'Customer Service & Hospitality Standards', duration: '1 week', order: 4 },
+      { skill: 'Inventory & Supply Chain Management', duration: '1-2 weeks', order: 5 }
+    ];
+    resources = [
+      { skill: 'Food Safety & HACCP Compliance', title: 'ServSafe Manager Certification Course', url: 'https://www.servsafe.com/', type: 'course' },
+      { skill: 'Restaurant Operations & Cost Control', title: 'Restaurant Management & Operations Guide', url: 'https://www.restaurantowner.com/', type: 'reading' },
+      { skill: 'Staff Management & Scheduling', title: 'Staff Scheduling Best Practices', url: 'https://7shifts.com/blog/', type: 'reading' },
+      { skill: 'Customer Service & Hospitality Standards', title: 'Hospitality Management Program', url: 'https://www.coursera.org/', type: 'course' },
+      { skill: 'Inventory & Supply Chain Management', title: 'Restaurant Inventory Spreadsheet Project', url: 'https://www.microsoft.com/excel', type: 'project' }
+    ];
+  } else if (targetLower.includes('fullstack') || targetLower.includes('full-stack') || targetLower.includes('frontend') || targetLower.includes('backend') || targetLower.includes('developer') || targetLower.includes('engineer')) {
     gaps = [
       { skill: 'React & Advanced Frontend', priority: 'high' },
       { skill: 'Node.js & Backend APIs', priority: 'high' },

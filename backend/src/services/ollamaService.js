@@ -11,20 +11,25 @@ const formatPrompt = (profile, target) => {
   const education = profile.education || 'Not specified';
   const experience = profile.experience || 'Not specified';
 
-  return `You are a career advisor. Given this profile and target,
-identify skill gaps and generate a prioritized roadmap.
+  return `You are a professional career advisor for ALL industries and fields, not just technology. 
+Given the user profile and career target below, identify the skill gaps and generate a personalized learning roadmap.
+
+The target role can be in ANY field : cooking, healthcare, design, management, finance, education, hospitality, engineering, arts, or any other domain.
+Ensure that recommendations are domain-specific and directly relevant to the target career sector. Do NOT suggest technical IT/programming/cloud skills unless the target role itself is explicitly in the technology sector (e.g. do not recommend database management or coding courses to a restaurant manager or culinary chef).
+
 Profile:
 - Skills: ${skillsList}
 - Education: ${education}
 - Experience: ${experience}
+
 Target: ${target}
-Respond ONLY in valid JSON with this exact structure:
+
+Respond ONLY in valid JSON with NO markdown :
 {
   "gaps": [{ "skill": string, "priority": "high"|"medium"|"low" }],
   "roadmap": [{ "skill": string, "duration": string, "order": number }],
   "resources": [{ "skill": string, "title": string, "url": string, "type": "course"|"project"|"reading" }]
-}
-Return ONLY the raw JSON output, without markdown formatting blocks or any extra conversation.`;
+}`;
 };
 
 /**

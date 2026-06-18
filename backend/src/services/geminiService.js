@@ -15,6 +15,7 @@ const formatPrompt = (profile, target) => {
 Given the user profile and career target below, identify the skill gaps and generate a personalized learning roadmap.
 
 The target role can be in ANY field : cooking, healthcare, design, management, finance, education, hospitality, engineering, arts, or any other domain.
+Ensure that recommendations are domain-specific and directly relevant to the target career sector. Do NOT suggest technical IT/programming/cloud skills unless the target role itself is explicitly in the technology sector (e.g. do not recommend database management or coding courses to a restaurant manager or culinary chef).
 
 Profile:
 - Skills: ${skillsList}
