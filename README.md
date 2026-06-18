@@ -80,7 +80,7 @@ Web application (responsive), accessible from any browser — no installation re
 - It solves a problem I've personally experienced during my training at Holberton
 - It's applicable to any field, not just software development
 - No existing tool covers the full pipeline — gap analysis → prioritized roadmap → curated resources — in one simple interface
-- Technically feasible as a solo project using React, Node.js, and Gemini Flash API (Google), within a 4 to 6 week timeline
+- Technically feasible as a solo project using React, Node.js, and Claude Haiku API (Anthropic), within a 4 to 6 week timeline
 
 ### 3 Key Features (SMART)
 
@@ -117,7 +117,7 @@ Web application (responsive), accessible from any browser — no installation re
 
 SkillMap started from a simple observation: during my training at Holberton, I realized that most people — myself included — struggle to identify what's actually standing between them and their career goals. There are tons of resources out there, but no tool that connects the dots between where you are now and where you want to be. That gap felt like a real problem worth solving.
 
-The idea went through a proper evaluation alongside several other concepts. Some were too niche, some had too much competition, and some were just not realistic to build solo in a few weeks. SkillMap stood out because it tackles a genuine, widely-felt problem, and it's technically achievable with the tools I already know — React for the frontend, Node.js for the backend, and Gemini Flash API (Google) for the intelligence layer.
+The idea went through a proper evaluation alongside several other concepts. Some were too niche, some had too much competition, and some were just not realistic to build solo in a few weeks. SkillMap stood out because it tackles a genuine, widely-felt problem, and it's technically achievable with the tools I already know — React for the frontend, Node.js for the backend, and Claude Haiku API (Anthropic) for the intelligence layer.
 
 The MVP is intentionally focused: a user fills in their profile, sets a career target, and gets back a personalized roadmap with prioritized skills and learning resources. No mentor matching, no LinkedIn scraping, no mobile app — just the core loop that delivers value from the first interaction. Everything else is v2.
 
@@ -151,7 +151,7 @@ This project is also a chance to go through the full product cycle solo — from
 
 ### Project Charter
 
-SkillMap is a web application that analyzes the gap between a user's current skill set and their career target, then generates a personalized learning roadmap with prioritized skills and concrete resources. The MVP delivers the core loop: a profile form, a target input, AI-powered gap analysis, a generated roadmap displayed in the UI, export functionality, and progress tracking — nothing more. Native mobile, mentor matching, and LinkedIn integration are explicitly out of scope and planned for a future version. The project is built solo using React, Node.js, and Gemini Flash API (Google), with sprints managed through GitHub Projects. Success means one thing: a user can enter their profile and career goal and receive a clear, actionable roadmap in under 30 seconds.
+SkillMap is a web application that analyzes the gap between a user's current skill set and their career target, then generates a personalized learning roadmap with prioritized skills and concrete resources. The MVP delivers the core loop: a profile form, a target input, AI-powered gap analysis, a generated roadmap displayed in the UI, export functionality, and progress tracking — nothing more. Native mobile, mentor matching, and LinkedIn integration are explicitly out of scope and planned for a future version. The project is built solo using React, Node.js, and Claude Haiku API (Anthropic), with sprints managed through GitHub Projects. Success means one thing: a user can enter their profile and career goal and receive a clear, actionable roadmap in under 30 seconds.
 
 ---
 
@@ -195,7 +195,7 @@ SkillMap has a full web interface — mockups are being designed in Figma. Below
 
 ### Task 1 — System Architecture
 
-The architecture is a classic three-tier setup: a React SPA talks to a Node.js/Express API, which handles business logic, persists data in PostgreSQL, and calls the Gemini Flash API for the AI-powered analysis. JWT handles authentication across the stack.
+The architecture is a classic three-tier setup: a React SPA talks to a Node.js/Express API, which handles business logic, persists data in PostgreSQL, and calls the Claude Haiku API for the AI-powered analysis. JWT handles authentication across the stack.
 
 ```mermaid
 graph TD
@@ -203,20 +203,20 @@ graph TD
     API["Node.js / Express API"]
     Auth["JWT Auth Middleware"]
     DB["PostgreSQL"]
-    Gemini["Gemini Flash API (Google)"]
+    Claude["Claude Haiku API (Anthropic)"]
 
     Client -->|"HTTP requests (JSON)"| Auth
     Auth -->|"Authenticated requests"| API
     API -->|"Read / Write"| DB
-    API -->|"Prompt (profile + target)"| Gemini
-    Gemini -->|"JSON response (gap + roadmap)"| API
+    API -->|"Prompt (profile + target)"| Claude
+    Claude -->|"JSON response (gap + roadmap)"| API
     API -->|"JSON response"| Client
 ```
 
 **How it flows:**
 1. The React client sends all requests through the JWT auth middleware — every protected route requires a valid token.
 2. The Express API handles routing, validation, and business logic.
-3. For gap analysis, the API builds a structured prompt from the user's profile and target, sends it to Gemini Flash, parses the response, stores the result in PostgreSQL, and returns it to the client.
+3. For gap analysis, the API builds a structured prompt from the user's profile and target, sends it to Claude Haiku, parses the response, stores the result in PostgreSQL, and returns it to the client.
 4. PostgreSQL stores everything: users, profiles, analyses, and resources.
 
 ---
@@ -270,7 +270,7 @@ classDiagram
         +getByAnalysisId(analysisId) Resource[]
     }
 
-    class GeminiService {
+    class ClaudeService {
         +analyzeGap(profile, target) GapResult
         +formatPrompt(profile, target) string
         +parseResponse(raw) GapResult
@@ -279,7 +279,7 @@ classDiagram
     User "1" --> "1" Profile : has
     User "1" --> "*" Analysis : performs
     Analysis "1" --> "*" Resource : contains
-    Analysis ..> GeminiService : uses
+    Analysis ..> ClaudeService : uses
 ```
 
 #### Database — Entity-Relationship Diagram
@@ -332,7 +332,7 @@ erDiagram
 | `AuthForm` | Handles sign-up and login forms, input validation, and error display. |
 | `ProfileForm` | Multi-section form for skills (tag input), education, and experience. Pre-fills on edit. |
 | `TargetInput` | Single input field with a toggle: type a job title or paste a full job description. |
-| `AnalysisLoader` | Loading state shown while the Gemini API processes the gap analysis. Animated indicator. |
+| `AnalysisLoader` | Loading state shown while the Claude Haiku API processes the gap analysis. Animated indicator. |
 | `RoadmapDisplay` | Renders the prioritized skill list with estimated durations and visual progress indicators. |
 | `ResourceCard` | Displays a single resource: title, type (course/project/reading), and external link. |
 | `ExportButton` | Triggers PDF generation or creates a shareable link. Shows confirmation on success. |
@@ -377,20 +377,20 @@ sequenceDiagram
     actor User
     participant React as React SPA
     participant API as Express API
-    participant Gemini as GeminiService
-    participant Flash as Gemini Flash API
+    participant Claude as ClaudeService
+    participant Haiku as Claude Haiku API
     participant DB as PostgreSQL
 
     User->>React: Enter target + click "Analyze"
     React->>API: POST /api/analysis (target, JWT)
     API->>DB: SELECT profile WHERE user_id = ?
     DB-->>API: User profile data
-    API->>Gemini: analyzeGap(profile, target)
-    Gemini->>Gemini: formatPrompt(profile, target)
-    Gemini->>Flash: POST /v1/models/gemini-flash (prompt)
-    Flash-->>Gemini: Raw JSON response
-    Gemini->>Gemini: parseResponse(raw)
-    Gemini-->>API: Structured gap result + roadmap
+    API->>Claude: analyzeGap(profile, target)
+    Claude->>Claude: formatPrompt(profile, target)
+    Claude->>Haiku: POST /v1/messages (prompt)
+    Haiku-->>Claude: Raw JSON response
+    Claude->>Claude: parseResponse(raw)
+    Claude-->>API: Structured gap result + roadmap
     API->>DB: INSERT INTO analyses (gap_result, roadmap)
     API->>DB: INSERT INTO resources (for each skill)
     DB-->>API: Saved
@@ -426,27 +426,26 @@ sequenceDiagram
 
 ### Task 4 — API Specifications
 
-#### External API — Gemini Flash (Google)
+#### External API — Claude Haiku (Anthropic)
 
-**Why Gemini Flash?** Three reasons: it's free within the generous quota limits (more than enough for an MVP), it's fast (optimized for low-latency responses), and it handles structured text analysis well — which is exactly what gap analysis requires. Compared to OpenAI GPT-4, it removes the cost barrier entirely during development and early usage.
+**Why Claude Haiku?** Three reasons: it's fast (extremely low-latency responses), highly cost-effective (perfect for a high-volume MVP), and exceptional at structured JSON generation — which is exactly what gap analysis requires. Compared to Gemini Flash, it offers superior reasoning on complex technical skills while remaining highly affordable.
 
-**Prompt format** — The API receives a structured prompt built from the user's profile and target:
+**Request format** — The API receives a structured message built from the user's profile and target:
 
 ```json
 {
-  "contents": [
+  "model": "claude-3-haiku-20240307",
+  "max_tokens": 1500,
+  "messages": [
     {
-      "parts": [
-        {
-          "text": "You are a career advisor. Given the following user profile and career target, identify the skill gaps and generate a prioritized learning roadmap.\n\nProfile:\n- Skills: JavaScript, React, Node.js\n- Education: Holberton School - Fullstack Web Development\n- Experience: 1 year of project-based learning\n\nTarget: Backend Engineer at a mid-size tech company\n\nRespond in JSON with this structure:\n{\n  \"gaps\": [{\"skill\": \"...\", \"priority\": \"high|medium|low\"}],\n  \"roadmap\": [{\"skill\": \"...\", \"duration\": \"...\", \"order\": 1}],\n  \"resources\": [{\"skill\": \"...\", \"title\": \"...\", \"url\": \"...\", \"type\": \"course|project|reading\"}]\n}"
-        }
-      ]
+      "role": "user",
+      "content": "You are a career advisor. Given the following user profile and career target, identify the skill gaps and generate a prioritized learning roadmap.\n\nProfile:\n- Skills: JavaScript, React, Node.js\n- Education: Holberton School - Fullstack Web Development\n- Experience: 1 year of project-based learning\n\nTarget: Backend Engineer at a mid-size tech company\n\nRespond in JSON with this structure:\n{\n  \"gaps\": [{\"skill\": \"...\", \"priority\": \"high|medium|low\"}],\n  \"roadmap\": [{\"skill\": \"...\", \"duration\": \"...\", \"order\": 1}],\n  \"resources\": [{\"skill\": \"...\", \"title\": \"...\", \"url\": \"...\", \"type\": \"course|project|reading\"}]\n}"
     }
   ]
 }
 ```
 
-**Expected response structure** (parsed from Gemini's output):
+**Expected response structure** (parsed from Claude's text content):
 
 ```json
 {
@@ -507,7 +506,7 @@ The repo follows a branch-based workflow designed for solo development but struc
 
 | Layer | Tool | What's Tested |
 |-------|------|---------------|
-| Backend unit tests | Jest | Services (GeminiService, auth logic) and controllers (input validation, response format) |
+| Backend unit tests | Jest | Services (ClaudeService, auth logic) and controllers (input validation, response format) |
 | Frontend component tests | React Testing Library | Critical UI components: `ProfileForm`, `RoadmapDisplay`, `AuthForm` |
 | API testing | Postman | Manual testing of all endpoints — happy path + error cases |
 | End-to-end | Manual | Full user flow (register → profile → analysis → roadmap → export) tested at the end of every sprint |
@@ -525,7 +524,7 @@ Every major technology choice was made deliberately — here's what was consider
 | **React** | Vue.js | React has a larger ecosystem, more community resources, and I already have hands-on experience with it from Holberton. Vue is great, but switching frameworks during a tight timeline adds unnecessary risk. |
 | **Node.js / Express** | Django (Python) | JavaScript across the entire stack (frontend + backend) means no context switching and shared tooling. Express is minimal and doesn't impose structure — which is an advantage when you want full control over the architecture. |
 | **PostgreSQL** | MongoDB | The data model is relational: users have profiles, profiles trigger analyses, analyses contain resources. PostgreSQL handles these relationships natively with joins and foreign keys. MongoDB would work, but a document store adds complexity for relational queries without a clear upside here. |
-| **Gemini Flash API (Google)** | OpenAI GPT-4 | Gemini Flash is free within its quota limits — critical for an MVP with zero budget. It's fast, handles structured text analysis well, and the Google AI SDK integrates cleanly with Node.js. GPT-4 is arguably more powerful, but the cost per request makes it impractical for development and testing at scale. |
+| **Claude Haiku API (Anthropic)** | Gemini Flash API | Claude Haiku is extremely fast, highly cost-effective, and provides excellent reliability for returning structured JSON content. While Gemini Flash has a free tier, its API keys are subject to compatibility and domain resolution issues in local and production environments, making Claude Haiku the more robust choice for production-grade reliability. |
 | **JWT** | Session-based auth | JWT is stateless — no server-side session storage needed. This simplifies the backend, scales naturally, and works seamlessly with a React SPA that sends tokens via headers. Sessions would require a store (Redis, DB) and add moving parts that aren't justified for this project. |
 | **Railway / Render** | AWS (EC2, RDS) | Railway and Render offer one-click deploys, free tiers for MVPs, and zero DevOps overhead. AWS is more powerful but wildly overkill for a solo project — configuring VPCs, security groups, and IAM roles is not where I should be spending my time during a 12-week build. |
 
@@ -541,21 +540,21 @@ The MVP is built across three one-week sprints. Each sprint has a clear scope an
 
 | Sprint | Duration | Goals | Key Tasks | Status |
 |--------|----------|-------|-----------|--------|
-| Sprint 1 — Foundation | Week 1 | Project scaffolding, database setup, authentication | Repo setup (folder structure, ESLint, Prettier), Node.js + Express init, PostgreSQL setup + migrations (users, profiles, analyses, resources), JWT auth: `POST /api/auth/register` + `POST /api/auth/login`, React app init + `AuthForm` component | 🔄 In Progress |
-| Sprint 2 — Core Feature | Week 2 | Profile management, AI integration, full frontend | `GET/PUT /api/profile`, `POST /api/analysis` (Gemini Flash integration), `GET /api/analysis/:id` + `GET /api/analysis/history`, React: `ProfileForm`, `TargetInput`, `AnalysisLoader`, `RoadmapDisplay`, `ResourceCard`, frontend ↔ backend connection | ⏳ Upcoming |
-| Sprint 3 — Polish & QA | Week 3 | History, export, testing, deployment | `AnalysisHistory`, `ExportButton` (PDF + shareable link), Jest unit tests (GeminiService, auth controllers), React Testing Library (`ProfileForm`, `RoadmapDisplay`), Postman API testing, bug fixes, deployment to Railway/Render | ⏳ Upcoming |
+| Sprint 1 — Foundation | Week 1 | Project scaffolding, database setup, authentication | Repo setup (folder structure, ESLint, Prettier), Node.js + Express init, PostgreSQL setup + migrations (users, profiles, analyses, resources), JWT auth: `POST /api/auth/register` + `POST /api/auth/login`, React app init + `AuthForm` component | ✅ Completed |
+| Sprint 2 — Core Feature | Week 2 | Profile management, AI integration, full frontend | `GET/PUT /api/profile`, `POST /api/analysis` (Claude Haiku integration), `GET /api/analysis/:id` + `GET /api/analysis/history`, React: `ProfileForm`, `TargetInput`, `AnalysisLoader`, `RoadmapDisplay`, `ResourceCard`, frontend ↔ backend connection | ⏳ Upcoming |
+| Sprint 3 — Polish & QA | Week 3 | History, export, testing, deployment | `AnalysisHistory`, `ExportButton` (PDF + shareable link), Jest unit tests (ClaudeService, auth controllers), React Testing Library (`ProfileForm`, `RoadmapDisplay`), Postman API testing, bug fixes, deployment to Railway/Render | ⏳ Upcoming |
 
 #### Detailed Task Breakdown
 
 | Task | Sprint | Priority | Status |
 |------|--------|----------|--------|
-| Init Node.js/Express project structure | Sprint 1 | Must Have | ⏳ |
-| Setup PostgreSQL + run migrations | Sprint 1 | Must Have | ⏳ |
-| Implement JWT auth (register + login) | Sprint 1 | Must Have | ⏳ |
-| Init React app + routing | Sprint 1 | Must Have | ⏳ |
-| Build AuthForm component | Sprint 1 | Must Have | ⏳ |
+| Init Node.js/Express project structure | Sprint 1 | Must Have | ✅ |
+| Setup PostgreSQL + run migrations | Sprint 1 | Must Have | ✅ |
+| Implement JWT auth (register + login) | Sprint 1 | Must Have | ✅ |
+| Init React app + routing | Sprint 1 | Must Have | ✅ |
+| Build AuthForm component | Sprint 1 | Must Have | ✅ |
 | Implement profile endpoints (GET/PUT) | Sprint 2 | Must Have | ⏳ |
-| Integrate Gemini Flash API | Sprint 2 | Must Have | ⏳ |
+| Integrate Claude Haiku API | Sprint 2 | Must Have | ⏳ |
 | Implement analysis endpoint (POST) | Sprint 2 | Must Have | ⏳ |
 | Build ProfileForm + TargetInput | Sprint 2 | Must Have | ⏳ |
 | Build RoadmapDisplay + ResourceCard | Sprint 2 | Must Have | ⏳ |
@@ -661,7 +660,7 @@ A full checklist to validate before considering the MVP done. Every box needs to
 
 - [ ] All API endpoints return correct status codes
 - [ ] JWT auth works on all protected routes
-- [ ] Gemini Flash returns structured JSON consistently
+- [ ] Claude Haiku returns structured JSON consistently
 - [ ] PostgreSQL queries perform correctly
 - [ ] No raw CV/profile data stored beyond session
 
@@ -674,7 +673,7 @@ A full checklist to validate before considering the MVP done. Every box needs to
 
 #### QA
 
-- [ ] Jest unit tests pass (GeminiService, auth)
+- [ ] Jest unit tests pass (ClaudeService, auth)
 - [ ] React Testing Library tests pass
 - [ ] All Postman tests pass
 - [ ] Manual flow tested on Chrome, Firefox, Safari
@@ -725,7 +724,7 @@ A checklist to go through before the final technical review. The goal is to walk
 - [ ] PostgreSQL relations (users → profiles → analyses → resources)
 - [ ] REST API design and HTTP status codes
 - [ ] React component architecture and state management
-- [ ] Gemini Flash prompt engineering
+- [ ] Claude Haiku prompt engineering
 - [ ] Git branching strategy and PR workflow
 
 #### Testing
