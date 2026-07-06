@@ -1,4 +1,74 @@
-# SkillMap — Stage 1 Report
+# 🗺️ SkillMap — Personalized Career Learning Roadmap Creator
+
+SkillMap is a web application that analyzes the gap between a user's current skills/profile and their target career goal, generating a personalized chronological learning roadmap with curated resources (courses, projects, readings).
+
+> [!NOTE]
+> **Mock Mode Fallback:** To make the application instantly testable, the backend is built with an automatic fallback mechanism. If no `GEMINI_API_KEY` is provided in the `.env` file, the app will seamlessly run using a rich `mockService` that supports all major industries (tech, cooking, healthcare, design, finance, etc.) with realistic timeline hierarchies.
+
+---
+
+## 🚀 Quick Start / Local Installation
+
+Follow these steps to get SkillMap running on your local machine.
+
+### 📋 Prerequisites
+- **Node.js** (v18 or higher recommended)
+- **PostgreSQL** database running locally or remotely
+
+### 🗄️ 1. Database Setup
+Create a PostgreSQL database named `skillmap`:
+```sql
+CREATE DATABASE skillmap;
+```
+Then, execute the schema migration script located in `backend/src/db/migrations.sql` against your new database to create the required tables (`users`, `profiles`, `analyses`, `resources`).
+
+### ⚙️ 2. Environment Setup
+
+#### Backend configuration:
+Create a `.env` file in the `backend` directory (you can copy `backend/.env.example` as a template):
+```env
+PORT=5002
+DATABASE_URL=postgresql://<username>:<password>@localhost:5432/skillmap
+JWT_SECRET=supersecretkeyforjwtdev123
+AI_PROVIDER=gemini
+GEMINI_API_KEY=your_gemini_api_key_here # Optional: if empty, Mock Mode will automatically activate
+```
+
+### 🏃‍♂️ 3. Running the Application
+
+Open two terminal windows:
+
+#### Start the Backend API:
+```bash
+cd backend
+npm install
+npm run dev
+```
+The API server will start on `http://localhost:5002`. You should see `SkillMap API running on port 5002`.
+
+#### Start the Frontend Web App:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+The Vite development server will start on `http://localhost:3000`. Open your browser and navigate to `http://localhost:3000`.
+
+### 🧪 Running Tests
+
+#### Backend unit tests (Jest):
+```bash
+cd backend
+npm test
+```
+
+#### Frontend component tests (Vitest):
+```bash
+cd frontend
+npm test
+```
+
+---
 
 ## 0. 🧑‍💻 Team Formation & Role Definition
 
