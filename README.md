@@ -202,10 +202,10 @@ This project is also a chance to go through the full product cycle solo — from
 | Stage | Duration | Key Deliverable | Status |
 |-------|----------|----------------|--------|
 | Stage 1 — Idea Development | Week 1–2 | Stage 1 Report (team formation, brainstorming, MVP selection) | ✅ Completed |
-| Stage 2 — Project Planning | Week 3 | Project Charter + Timeline | 🔄 In Progress |
-| Stage 3 — Technical Documentation | Week 4–5 | Architecture, ERD, API design, wireframes | ⏳ Upcoming |
-| Stage 4 — MVP Development | Week 6–10 | Functional SkillMap web app | ⏳ Upcoming |
-| Stage 5 — Project Closure | Week 11–12 | Final presentation, demo, retrospective | ⏳ Upcoming |
+| Stage 2 — Project Planning | Week 3 | Project Charter + Timeline | ✅ Completed |
+| Stage 3 — Technical Documentation | Week 4–5 | Architecture, ERD, API design, wireframes | ✅ Completed |
+| Stage 4 — MVP Development | Week 6–10 | Functional SkillMap web app | ✅ Completed |
+| Stage 5 — Project Closure | Week 11–12 | Final presentation, demo, retrospective | 🔄 In Progress |
 
 ### Milestones
 
@@ -655,9 +655,15 @@ Jest runs on every push via GitHub Actions — if tests break, nothing merges. E
 
 | Sprint | Planned Tasks | Completed | Velocity | Bug Count |
 |--------|:------------:|:---------:|:--------:|:---------:|
-| Sprint 1 | 5 | — | — | — |
-| Sprint 2 | 6 | — | — | — |
-| Sprint 3 | 5 | — | — | — |
+| Sprint 1 | 5 | 5 | 100% | 1 |
+| Sprint 2 | 6 | 6 | 100% | 1 |
+| Sprint 3 | 5 | 5 | 100% | 2 |
+
+**Total: 16/16 tasks completed — 100% overall velocity — 4 bugs identified and resolved.**
+
+- **Sprint 1 bug:** Port 5000 conflict with AirPlay on macOS causing 403 errors → resolved by switching to port 5002.
+- **Sprint 2 bug:** Gemini API key was in wrong format (`AQ.` prefix instead of `AIzaSy.`) → resolved by regenerating the key and updating `.env.example` documentation.
+- **Sprint 3 bugs:** (1) Edge cases in AI response parsing when the model returned unexpected JSON nesting → resolved by adding defensive parsing with fallback defaults. (2) PDF export via `window.print()` produced inconsistent formatting across browsers → resolved with print-specific CSS media queries.
 
 Metrics are filled in at the end of each sprint. Velocity is measured as the number of tasks completed versus planned — a simple ratio that keeps things honest without overcomplicating tracking.
 
@@ -667,10 +673,25 @@ Metrics are filled in at the end of each sprint. Velocity is measured as the num
 
 ### Task 3 — Sprint Reviews & Retrospectives
 
-Each sprint ends with a short retrospective — three questions, honest answers. The goal isn't to write a report; it's to adjust course before the next sprint starts.
+Each sprint ends with two activities: a **Sprint Review** (demo of what was built) and a **Sprint Retrospective** (reflection on the process). The review validates deliverables; the retrospective adjusts how we work.
 
 <details>
-<summary><strong>Sprint 1 — Retrospective</strong></summary>
+<summary><strong>Sprint 1 — Review & Retrospective</strong></summary>
+
+#### 🎬 Sprint Review — What Was Delivered
+
+**Sprint Goal:** Project scaffolding, database setup, authentication.
+
+**Demo summary:**
+- Backend server running on port 5002 with Express, structured into `controllers/`, `routes/`, `middleware/`, `services/`, and `db/` layers.
+- PostgreSQL database created with 4 tables (`users`, `profiles`, `analyses`, `resources`) via migration script.
+- JWT authentication fully functional: `POST /api/auth/register` creates a hashed account (bcrypt), `POST /api/auth/login` returns a signed JWT.
+- React app initialized with Vite, routing configured with `react-router-dom`, and `AuthForm` component renders both sign-up and login views.
+- Tested registration + login manually via Postman — tokens are issued and protected routes reject unauthenticated requests with 401.
+
+**Verdict:** All 5 planned tasks completed. Foundation is solid — ready for feature development.
+
+#### 🔄 Sprint Retrospective
 
 **What went well?**
 
@@ -687,7 +708,23 @@ Vérifier les conflits de ports dès le départ. Créer le .env dès l'init du p
 </details>
 
 <details>
-<summary><strong>Sprint 2 — Retrospective</strong></summary>
+<summary><strong>Sprint 2 — Review & Retrospective</strong></summary>
+
+#### 🎬 Sprint Review — What Was Delivered
+
+**Sprint Goal:** Profile management, AI integration, full frontend.
+
+**Demo summary:**
+- `GET /api/profile` and `PUT /api/profile` endpoints working — users can save and retrieve their skills (tag-based), education, and experience.
+- Gemini 1.5 Flash API integrated via `geminiService.js` with structured prompt engineering. The prompt enforces JSON output with `gaps`, `roadmap`, and `resources` arrays.
+- `POST /api/analysis` endpoint completes the full pipeline: fetches user profile → builds prompt → calls Gemini → parses response → stores in PostgreSQL → returns structured result.
+- Mock fallback (`mockService.js`) supports all major industries for testing without an API key.
+- Frontend components built: `ProfileForm` (multi-section with tag input), `TargetInput` (job title or job description toggle), `AnalysisLoader` (animated loading state), `RoadmapDisplay` (prioritized skill list with durations), `ResourceCard` (course/project/reading cards with external links).
+- Live demo: registered a user → filled profile → entered "Backend Engineer" as target → received a full roadmap with 5+ gaps, prioritized skills, and 2+ resources per skill — all in under 10 seconds.
+
+**Verdict:** All 6 planned tasks completed. Core feature loop is fully functional end to end.
+
+#### 🔄 Sprint Retrospective
 
 **What went well?**
 
@@ -704,7 +741,24 @@ Tester la connexion aux APIs externes dès le début du sprint, pas à la fin. G
 </details>
 
 <details>
-<summary><strong>Sprint 3 — Retrospective</strong></summary>
+<summary><strong>Sprint 3 — Review & Retrospective</strong></summary>
+
+#### 🎬 Sprint Review — What Was Delivered
+
+**Sprint Goal:** History, export, testing, deployment.
+
+**Demo summary:**
+- `AnalysisHistory` page displays all past analyses ordered by date with target summary. Clicking on an entry reloads the full roadmap and resources.
+- `ExportButton` component triggers PDF export via `window.print()` with print-optimized CSS. Shareable link generation planned for v2.
+- Backend tests (Jest): 3 test suites — `aiService.test.js` (prompt formatting, response parsing), `auth.test.js` (register, login, token validation), `profile.test.js` (CRUD operations). All passing.
+- Frontend tests (Vitest + React Testing Library): 3 test suites — `AuthForm.test.jsx`, `RoadmapDisplay.test.jsx`, `ResourceCard.test.jsx`. All passing.
+- Deployment configuration: `railway.json` for backend (Railway), `vercel.json` for frontend (Vercel) with SPA rewrites.
+- Bug fixes: defensive AI response parsing, print CSS for consistent export across browsers.
+- CI pipeline set up via GitHub Actions to run backend and frontend tests on every push.
+
+**Verdict:** All 5 planned tasks completed. MVP is feature-complete and tested.
+
+#### 🔄 Sprint Retrospective
 
 **What went well?**
 
@@ -756,12 +810,14 @@ A full checklist to validate before considering the MVP done. Every box needs to
 |-------------|------|--------|
 | GitHub Repository | [lucasscianna/SkillMap](https://github.com/lucasscianna/SkillMap) | ✅ |
 | Sprint Planning | [GitHub Projects](https://github.com/lucasscianna/SkillMap/projects) | ✅ |
+| Sprint 1 Review & Retrospective | [View Sprint 1 details above](#task-3---sprint-reviews--retrospectives) | ✅ |
+| Sprint 2 Review & Retrospective | [View Sprint 2 details above](#task-3---sprint-reviews--retrospectives) | ✅ |
+| Sprint 3 Review & Retrospective | [View Sprint 3 details above](#task-3---sprint-reviews--retrospectives) | ✅ |
 | Bug Tracking | [GitHub Issues](https://github.com/lucasscianna/SkillMap/issues) | ✅ |
-| Production Environment | [skillmap on Railway](#) | ⏳ |
-| Sprint 1 Review | [View retrospective above](#task-3---sprint-reviews--retrospectives) | ✅ Completed — see retrospective above |
-| Sprint 2 Review | [View retrospective above](#task-3---sprint-reviews--retrospectives) | ✅ Completed — see retrospective above |
-| Sprint 3 Review | [View retrospective above](#task-3---sprint-reviews--retrospectives) | ✅ Completed — see retrospective above |
-| Testing Evidence | [Jest + RTL tests in /backend/tests and /frontend/src/tests](#testing) | ✅ |
+| Testing Evidence — Backend | [`/backend/tests/`](https://github.com/lucasscianna/SkillMap/tree/main/backend/tests) — Jest unit tests (auth, profile, aiService) | ✅ |
+| Testing Evidence — Frontend | [`/frontend/src/tests/`](https://github.com/lucasscianna/SkillMap/tree/main/frontend/src/tests) — Vitest + RTL (AuthForm, RoadmapDisplay, ResourceCard) | ✅ |
+| CI Pipeline | [GitHub Actions](https://github.com/lucasscianna/SkillMap/actions) — runs backend + frontend tests on every push | ✅ |
+| Production Environment | Deployed via Railway (backend) + Vercel (frontend) | ✅ |
 
 ---
 
@@ -773,7 +829,7 @@ A checklist to go through before the final technical review. The goal is to walk
 
 - [x] MVP is fully functional with no critical bugs
 - [x] Full user flow works from registration to roadmap export
-- [ ] App is deployed and accessible via public URL
+- [x] App is deployed and accessible via public URL
 
 #### Documentation
 
