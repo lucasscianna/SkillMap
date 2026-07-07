@@ -119,7 +119,7 @@ function AuthForm() {
           </div>
 
           <div className="font-sans text-sm text-outline">
-            © 2024 SkillMap. All rights reserved.
+            © 2026 SkillMap. All rights reserved.
           </div>
         </div>
 
