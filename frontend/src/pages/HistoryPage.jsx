@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getHistory } from '../services/api';
 
 /**
  * HistoryPage component.
@@ -17,7 +18,7 @@ function HistoryPage() {
   }, []);
 
   /**
-   * Fetch analysis history from backend.
+   * Fetch analysis history from backend (with mock fallback).
    */
   const fetchHistory = async () => {
     try {
@@ -27,22 +28,7 @@ function HistoryPage() {
         return;
       }
 
-      const res = await fetch('/api/analysis/history', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          localStorage.removeItem('skillmap_token');
-          navigate('/');
-          return;
-        }
-        throw new Error('Failed to retrieve history');
-      }
-
-      const data = await res.json();
+      const data = await getHistory();
       setHistory(data);
     } catch (err) {
       setError(err.message || 'An error occurred while loading history.');
