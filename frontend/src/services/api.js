@@ -170,23 +170,20 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Response interceptor — on network failure fall back to mock data
+// Response interceptor — on ANY failure (except 401) fall back to mock data
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    // If backend returns 401, clear token and redirect
+    // If backend returns 401, clear token and redirect (real auth rejection)
     if (error.response && error.response.status === 401) {
       localStorage.removeItem('skillmap_token');
       window.location.href = '/';
       return Promise.reject(error);
     }
 
-    // If network error or 5xx or CORS error → try mock fallback
-    const isNetworkError = !error.response;
-    const isServerError = error.response && error.response.status >= 500;
-
-    if (isNetworkError || isServerError) {
-      const config = error.config;
+    // For ALL other errors (network, 4xx, 5xx, CORS) → try mock fallback
+    const config = error.config;
+    if (config) {
       const method = (config.method || 'get').toUpperCase();
       // Strip baseURL to get the relative path
       let url = config.url || '';
@@ -200,7 +197,8 @@ api.interceptors.response.use(
 
       const handler = getMockHandler(method, url);
       if (handler) {
-        console.warn(`[SkillMap] Backend unreachable — using mock data for ${method} ${url}`);
+        const errStatus = error.response ? error.response.status : 'NETWORK_ERROR';
+        console.warn(`[SkillMap] Backend error (${errStatus}) — using mock data for ${method} ${url}`);
         const mockData = await handler(url, config.data ? JSON.parse(config.data) : undefined);
         return { data: mockData, status: 200, statusText: 'OK (Mock)', config };
       }
