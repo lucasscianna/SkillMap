@@ -1,11 +1,19 @@
 # 🗺️ SkillMap — Personalized Career Learning Roadmap Creator
 
+[![CI Status](https://github.com/lucasscianna/SkillMap/actions/workflows/ci.yml/badge.svg)](https://github.com/lucasscianna/SkillMap/actions)
+[![Deployed on Vercel](https://img.shields.io/badge/Frontend-Vercel-black?logo=vercel)](https://skill-map-amber.vercel.app)
+[![Deployed on Railway](https://img.shields.io/badge/Backend-Railway-purple?logo=railway)](https://skillmap-production-f710.up.railway.app/api/health)
+
 SkillMap is a web application that analyzes the gap between a user's current skills/profile and their target career goal, generating a personalized chronological learning roadmap with curated resources (courses, projects, readings).
 
-> [!NOTE]
-> **Mock Mode Fallback:** To make the application instantly testable, the backend is built with an automatic fallback mechanism. If no `GEMINI_API_KEY` is provided in the `.env` file, the app will seamlessly run using a rich `mockService` that supports all major industries (tech, cooking, healthcare, design, finance, etc.) with realistic timeline hierarchies.
+> [!IMPORTANT]
+> **🌐 Live Production URLs:**
+> - **Frontend (Vercel):** [https://skill-map-amber.vercel.app](https://skill-map-amber.vercel.app)
+> - **Backend API (Railway):** [https://skillmap-production-f710.up.railway.app/api/health](https://skillmap-production-f710.up.railway.app/api/health)
+> - **GitHub Repository:** [https://github.com/lucasscianna/SkillMap](https://github.com/lucasscianna/SkillMap)
 
----
+> [!NOTE]
+> **Resilient Mock Fallback:** The application has a dual-layer reliability strategy. The backend includes a `mockService` that activates when no `GEMINI_API_KEY` is configured. Additionally, the frontend has an automatic API fallback mechanism — if the backend is unreachable or returns errors, the frontend seamlessly switches to realistic mock data, ensuring the full user experience is always accessible and demonstrable.
 
 ## 🚀 Quick Start / Local Installation
 
@@ -67,6 +75,169 @@ npm test
 cd frontend
 npm test
 ```
+---
+
+## 🌐 Deployment Architecture
+
+The application is deployed using a split architecture with separate services for frontend and backend:
+
+```mermaid
+graph LR
+    User["👤 User (Browser)"]
+    Vercel["Vercel CDN<br/>React SPA<br/>skill-map-amber.vercel.app"]
+    Railway["Railway<br/>Node.js/Express API<br/>skillmap-production-f710.up.railway.app"]
+    PG["Railway Postgres<br/>Database"]
+    Gemini["Google Gemini<br/>1.5 Flash API"]
+
+    User -->|"HTTPS"| Vercel
+    Vercel -->|"API proxy /api/*"| Railway
+    Railway -->|"SQL queries"| PG
+    Railway -->|"AI prompts"| Gemini
+```
+
+| Component | Service | URL | Configuration |
+|-----------|---------|-----|---------------|
+| **Frontend** | Vercel | [skill-map-amber.vercel.app](https://skill-map-amber.vercel.app) | Root Directory: `frontend`, Framework: Vite, Auto-deploy on push to `main` |
+| **Backend API** | Railway | [skillmap-production-f710.up.railway.app](https://skillmap-production-f710.up.railway.app/api/health) | Root Directory: `backend`, Nixpacks builder, Auto-deploy on push to `main` |
+| **Database** | Railway Postgres | Internal connection via `DATABASE_URL` | Managed PostgreSQL instance with persistent volume |
+| **CI/CD** | GitHub Actions | [Workflow runs](https://github.com/lucasscianna/SkillMap/actions) | Runs Jest + Vitest on every push to `main`/`develop` |
+
+> [!TIP]
+> **Resilience:** The frontend includes a smart API fallback — if the Railway backend is temporarily unavailable, the frontend automatically switches to mock data so the full user experience remains functional. This is logged in the browser console as `[SkillMap] Backend error (…) — using mock data`.
+
+---
+
+## 📁 Project Structure
+
+```
+SkillMap/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                  # GitHub Actions CI pipeline
+├── backend/
+│   ├── src/
+│   │   ├── controllers/
+│   │   │   ├── authController.js   # Register + login logic
+│   │   │   ├── profileController.js# Profile CRUD
+│   │   │   └── analysisController.js# Gap analysis orchestration
+│   │   ├── routes/
+│   │   │   ├── auth.js             # POST /api/auth/register, /api/auth/login
+│   │   │   ├── profile.js          # GET/PUT /api/profile
+│   │   │   └── analysis.js         # POST /api/analysis, GET /api/analysis/:id, history
+│   │   ├── services/
+│   │   │   ├── geminiService.js    # Gemini 1.5 Flash API integration
+│   │   │   ├── mockService.js      # Multi-industry mock fallback
+│   │   │   └── ollamaService.js    # Local AI alternative (dev)
+│   │   ├── middleware/
+│   │   │   └── auth.js             # JWT verification middleware
+│   │   ├── db/
+│   │   │   ├── index.js            # PostgreSQL connection pool
+│   │   │   └── migrations.sql      # Database schema (4 tables)
+│   │   └── index.js                # Express server entry point
+│   ├── tests/
+│   │   ├── auth.test.js            # Auth endpoint tests
+│   │   ├── profile.test.js         # Profile endpoint tests
+│   │   └── aiService.test.js       # AI service tests
+│   ├── package.json
+│   └── railway.json                # Railway deployment config
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── AuthForm.jsx        # Login/signup form
+│   │   │   ├── ProfileForm.jsx     # Profile editor with tag input
+│   │   │   ├── TargetInput.jsx     # Job title / description input
+│   │   │   ├── AnalysisLoader.jsx  # Loading animation
+│   │   │   ├── RoadmapDisplay.jsx  # Skill gap roadmap timeline
+│   │   │   ├── ResourceCard.jsx    # Learning resource card
+│   │   │   ├── ExportButton.jsx    # PDF export trigger
+│   │   │   ├── Navbar.jsx          # Top navigation
+│   │   │   ├── SideNavBar.jsx      # Sidebar navigation
+│   │   │   └── MainLayout.jsx      # Page layout wrapper
+│   │   ├── pages/
+│   │   │   ├── ProfilePage.jsx     # Step 2: Profile setup
+│   │   │   ├── AnalysisPage.jsx    # Step 3: Target + launch analysis
+│   │   │   ├── ResultsPage.jsx     # Step 4: Gap results + roadmap
+│   │   │   ├── HistoryPage.jsx     # Past analyses grid
+│   │   │   └── ExportPage.jsx      # PDF preview + export
+│   │   ├── services/
+│   │   │   └── api.js              # Axios instance + mock fallback
+│   │   ├── tests/
+│   │   │   ├── AuthForm.test.jsx
+│   │   │   ├── RoadmapDisplay.test.jsx
+│   │   │   └── ResourceCard.test.jsx
+│   │   ├── App.jsx                 # Router + route definitions
+│   │   ├── main.jsx                # React entry point
+│   │   └── index.css               # Global styles + design system
+│   ├── package.json
+│   ├── vite.config.js              # Vite config + dev proxy
+│   └── vercel.json                 # Vercel deployment config
+├── assets/
+│   └── mockups/                    # Interactive HTML mockups
+└── README.md                       # This file
+```
+
+---
+
+## 🔄 How the Application Works
+
+### User Flow
+
+The complete user journey follows a 4-step pipeline:
+
+```mermaid
+flowchart LR
+    A["1️⃣ Sign Up / Log In"] --> B["2️⃣ Build Profile"]
+    B --> C["3️⃣ Set Career Target"]
+    C --> D["4️⃣ View Results & Roadmap"]
+    D --> E["Export PDF"]
+    D --> F["Run New Analysis"]
+    D --> G["View History"]
+```
+
+1. **Authentication** — User registers or logs in. Password is hashed with `bcrypt` (12 rounds). A signed JWT is returned and stored in `localStorage`.
+2. **Profile Setup** — User enters their skills (tag-based), education, and experience. Data is stored in PostgreSQL via `PUT /api/profile`.
+3. **Career Target** — User types a job title or pastes a full job description. Clicking "Analyze" triggers `POST /api/analysis`.
+4. **Gap Analysis** — The backend fetches the user's profile, constructs a structured prompt, calls the Gemini 1.5 Flash API, parses the JSON response into `gaps`, `roadmap`, and `resources`, stores everything in PostgreSQL, and returns the result to the frontend.
+5. **Results** — The frontend displays a match percentage, skill gaps by priority (high/medium/low), a chronological learning roadmap with estimated durations, and curated resource cards.
+6. **Export** — The user can export the roadmap as a print-optimized PDF or navigate to their analysis history.
+
+### Security
+
+| Mechanism | Implementation |
+|-----------|---------------|
+| Password storage | `bcrypt` hash with 12 salt rounds — plaintext passwords are never stored |
+| Authentication | Stateless JWT tokens (signed with `HS256`) — no server-side sessions |
+| Route protection | `middleware/auth.js` verifies JWT on every protected endpoint |
+| Input validation | Server-side validation on all API inputs before database insertion |
+| CORS | Configured via `cors` middleware to allow frontend origin |
+
+---
+
+## 🧪 Testing Strategy
+
+### Test Architecture
+
+| Layer | Tool | Files | What's Tested |
+|-------|------|-------|---------------|
+| **Backend Unit Tests** | Jest + Supertest | `auth.test.js`, `profile.test.js`, `aiService.test.js` | Auth endpoints, profile CRUD, AI prompt formatting, response parsing |
+| **Frontend Component Tests** | Vitest + React Testing Library | `AuthForm.test.jsx`, `RoadmapDisplay.test.jsx`, `ResourceCard.test.jsx` | Form rendering, tab switching, roadmap display, resource cards |
+| **API Integration Testing** | Postman | Manual collection | All 7 endpoints — happy path + error cases (400, 401, 404) |
+| **End-to-End** | Manual QA | Full user flow | Register → Profile → Analysis → Results → Export on Chrome/Firefox |
+| **CI/CD** | GitHub Actions | `.github/workflows/ci.yml` | Automated test runs on every push to `main`/`develop` |
+
+### How to Run Tests
+
+```bash
+# Backend tests (Jest)
+cd backend && npm test
+
+# Frontend tests (Vitest)
+cd frontend && npm test
+```
+
+### Test Results
+
+All test suites pass consistently. CI pipeline results are visible at [GitHub Actions](https://github.com/lucasscianna/SkillMap/actions).
 
 ---
 
@@ -205,7 +376,7 @@ This project is also a chance to go through the full product cycle solo — from
 | Stage 2 — Project Planning | Week 3 | Project Charter + Timeline | ✅ Completed |
 | Stage 3 — Technical Documentation | Week 4–5 | Architecture, ERD, API design, wireframes | ✅ Completed |
 | Stage 4 — MVP Development | Week 6–10 | Functional SkillMap web app | ✅ Completed |
-| Stage 5 — Project Closure | Week 11–12 | Final presentation, demo, retrospective | 🔄 In Progress |
+| Stage 5 — Project Closure | Week 11–12 | Final presentation, demo, retrospective | ✅ Completed |
 
 ### Milestones
 
@@ -808,16 +979,18 @@ A full checklist to validate before considering the MVP done. Every box needs to
 
 | Deliverable | Link | Status |
 |-------------|------|--------|
-| GitHub Repository | [lucasscianna/SkillMap](https://github.com/lucasscianna/SkillMap) | ✅ |
-| Sprint Planning | [GitHub Projects](https://github.com/lucasscianna/SkillMap/projects) | ✅ |
-| Sprint 1 Review & Retrospective | [View Sprint 1 details above](#task-3---sprint-reviews--retrospectives) | ✅ |
-| Sprint 2 Review & Retrospective | [View Sprint 2 details above](#task-3---sprint-reviews--retrospectives) | ✅ |
-| Sprint 3 Review & Retrospective | [View Sprint 3 details above](#task-3---sprint-reviews--retrospectives) | ✅ |
-| Bug Tracking | [GitHub Issues](https://github.com/lucasscianna/SkillMap/issues) | ✅ |
-| Testing Evidence — Backend | [`/backend/tests/`](https://github.com/lucasscianna/SkillMap/tree/main/backend/tests) — Jest unit tests (auth, profile, aiService) | ✅ |
-| Testing Evidence — Frontend | [`/frontend/src/tests/`](https://github.com/lucasscianna/SkillMap/tree/main/frontend/src/tests) — Vitest + RTL (AuthForm, RoadmapDisplay, ResourceCard) | ✅ |
-| CI Pipeline | [GitHub Actions](https://github.com/lucasscianna/SkillMap/actions) — runs backend + frontend tests on every push | ✅ |
-| Production Environment | Deployed via Railway (backend) + Vercel (frontend) | ✅ |
+| **Source Repository** | [github.com/lucasscianna/SkillMap](https://github.com/lucasscianna/SkillMap) | ✅ |
+| **Production Environment — Frontend** | [skill-map-amber.vercel.app](https://skill-map-amber.vercel.app) (Vercel) | ✅ |
+| **Production Environment — Backend API** | [skillmap-production-f710.up.railway.app](https://skillmap-production-f710.up.railway.app/api/health) (Railway + PostgreSQL) | ✅ |
+| **Sprint Planning** | [GitHub Projects Board](https://github.com/lucasscianna/SkillMap/projects) | ✅ |
+| **Sprint 1 Review & Retrospective** | [View Sprint 1 details](#task-3---sprint-reviews--retrospectives) | ✅ |
+| **Sprint 2 Review & Retrospective** | [View Sprint 2 details](#task-3---sprint-reviews--retrospectives) | ✅ |
+| **Sprint 3 Review & Retrospective** | [View Sprint 3 details](#task-3---sprint-reviews--retrospectives) | ✅ |
+| **Bug Tracking** | [GitHub Issues](https://github.com/lucasscianna/SkillMap/issues) | ✅ |
+| **Testing Evidence — Backend** | [/backend/tests/](https://github.com/lucasscianna/SkillMap/tree/main/backend/tests) — Jest unit tests (`auth.test.js`, `profile.test.js`, `aiService.test.js`) | ✅ |
+| **Testing Evidence — Frontend** | [/frontend/src/tests/](https://github.com/lucasscianna/SkillMap/tree/main/frontend/src/tests) — Vitest + RTL (`AuthForm.test.jsx`, `RoadmapDisplay.test.jsx`, `ResourceCard.test.jsx`) | ✅ |
+| **Testing Results — CI Pipeline** | [GitHub Actions](https://github.com/lucasscianna/SkillMap/actions) — automated test runs on every push to `main` and `develop` | ✅ |
+| **CI/CD Configuration** | [ci.yml](https://github.com/lucasscianna/SkillMap/blob/main/.github/workflows/ci.yml) — GitHub Actions workflow | ✅ |
 
 ---
 
