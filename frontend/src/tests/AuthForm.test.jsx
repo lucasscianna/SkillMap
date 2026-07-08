@@ -20,7 +20,7 @@ describe('AuthForm Component', () => {
     expect(screen.getByLabelText(/email address/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
     
-    const submitBtn = screen.getByRole('button', { name: /log in/i });
+    const submitBtn = screen.getByRole('button', { name: 'Log In'});
     expect(submitBtn).toBeInTheDocument();
   });
 
